@@ -17,13 +17,7 @@
         .container {
             max-width: 900px;
         }
-        .accordion-item {
-            background-color: #fff;
-            border-radius: 1rem;
-            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
-            border: 1px solid #fecdd3;
-        }
-        .accordion-header {
+        .section-header {
             cursor: pointer;
             padding: 1.25rem;
             display: flex;
@@ -31,26 +25,10 @@
             align-items: center;
             border-bottom: 1px solid #fecdd3;
             transition: background-color 0.2s ease-in-out;
+            background-color: #f5f5f4; /* stone-100 */
         }
-        .accordion-header:hover {
-            background-color: #ffe4e6;
-        }
-        .accordion-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
-            padding: 0 1.25rem;
-        }
-        .accordion-content.active {
-            max-height: 500px;
-            overflow-y: auto;
-            padding: 1.25rem;
-        }
-        .chevron-down {
-            transition: transform 0.3s ease;
-        }
-        .accordion-item.active .chevron-down {
-            transform: rotate(180deg);
+        .section-header:hover {
+            background-color: #e7e5e4; /* stone-200 */
         }
         .prose h4 {
             font-weight: 600;
@@ -107,6 +85,9 @@
             padding: 0.5rem;
             text-align: left;
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body class="p-6">
@@ -122,442 +103,413 @@
             <hr class="w-24 h-1 mx-auto my-4 bg-orange-400 border-0 rounded">
         </header>
 
+        <!-- Nouvelle navigation par liste déroulante -->
+        <div class="mb-6 flex justify-center items-center gap-2">
+            <label for="navigation-select" class="text-lg font-bold text-gray-700">Aller à la section :</label>
+            <select id="navigation-select" class="test-input w-auto p-2 rounded-lg border-2 border-orange-400 text-gray-700">
+                <option value="">Sélectionner un thème</option>
+                <option value="section-salaire">1. Salaire de base et horaire</option>
+                <option value="section-heures">2. Heures complémentaires et supplémentaires</option>
+                <option value="section-absences">3. Méthodes de décompte des absences</option>
+                <option value="section-ijss">4. IJSS (Indemnités Journalières)</option>
+                <option value="section-maintien">5. Maintien de salaire légal</option>
+                <option value="section-avantages">6. Avantages en nature</option>
+                <option value="section-rgcp">7. Réduction Générale de Cotisations (RGCP)</option>
+            </select>
+        </div>
+
         <main class="space-y-6">
 
             <!-- Section 1: Salaire de base et horaire -->
-            <div class="accordion-item" id="accordion-item-1">
-                <div class="accordion-header flex justify-between items-center bg-stone-50 hover:bg-stone-100">
+            <div id="section-salaire" class="content-section hidden">
+                <div class="prose max-w-none text-gray-700">
                     <h3 class="text-xl font-bold text-stone-700">1. Salaire de base et horaire</h3>
-                    <svg class="chevron-down w-6 h-6 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content">
-                    <div class="prose max-w-none text-gray-700">
-                        <h4 class="font-bold text-stone-700">Durée mensuelle moyenne</h4>
-                        <p>La durée légale du travail est de 35 heures par semaine. Pour obtenir une moyenne mensuelle, on applique la formule de mensualisation :</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            (Heures Hebdomadaires x 52 Semaines) / 12 Mois
-                        </p>
-                        <p><strong>Exemple :</strong> Pour un contrat de 35h/semaine : (35 x 52) / 12 = 151,67 heures.</p>
-                        <hr>
-                        <h4 class="font-bold text-stone-700">Salaire de base</h4>
-                        <p>Le salaire de base est le montant fixe que perçoit un salarié. Il se calcule en multipliant son horaire mensuel par son taux horaire.</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Horaire Mensuel Moyen x Taux Horaire
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures hebdomadaires:</label>
-                            <input type="number" id="heures-hebdo" class="test-input" value="35">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Taux horaire (€):</label>
-                            <input type="number" id="taux-horaire" class="test-input" value="13">
-                            <button onclick="calculerSalaire()" class="test-button">Calculer le salaire de base</button>
-                            <div id="resultat-salaire" class="test-result"></div>
-                            <div id="justification-salaire" class="justification-box hidden"></div>
-                        </div>
+                    <hr>
+                    <h4 class="font-bold text-stone-700">Durée mensuelle moyenne</h4>
+                    <p>La durée légale du travail est de 35 heures par semaine. Pour obtenir une moyenne mensuelle, on applique la formule de mensualisation :</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        (Heures Hebdomadaires x 52 Semaines) / 12 Mois
+                    </p>
+                    <p><strong>Exemple :</strong> Pour un contrat de 35h/semaine : (35 x 52) / 12 = 151,67 heures.</p>
+                    <hr>
+                    <h4 class="font-bold text-stone-700">Salaire de base</h4>
+                    <p>Le salaire de base est le montant fixe que perçoit un salarié. Il se calcule en multipliant son horaire mensuel par son taux horaire.</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Horaire Mensuel Moyen x Taux Horaire
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Heures hebdomadaires:</label>
+                        <input type="number" id="heures-hebdo" class="test-input" value="35">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Taux horaire (€):</label>
+                        <input type="number" id="taux-horaire" class="test-input" value="13">
+                        <button onclick="calculerSalaire()" class="test-button">Calculer le salaire de base</button>
+                        <div id="resultat-salaire" class="test-result"></div>
+                        <div id="justification-salaire" class="justification-box hidden"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Section 2: Heures complémentaires et supplémentaires -->
-            <div class="accordion-item" id="accordion-item-2">
-                <div class="accordion-header flex justify-between items-center bg-yellow-50 hover:bg-yellow-100">
+            <div id="section-heures" class="content-section hidden">
+                <div class="prose max-w-none text-gray-700">
                     <h3 class="text-xl font-bold text-yellow-700">2. Heures complémentaires et supplémentaires</h3>
-                    <svg class="chevron-down w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content">
-                    <div class="prose max-w-none text-gray-700">
-                        <h4 class="font-bold text-yellow-700">Heures complémentaires (temps partiel)</h4>
-                        <p>Elles sont effectuées au-delà du contrat, mais en deçà des 35h. Elles sont majorées selon la loi :</p>
-                        <ul class="list-disc list-inside">
-                            <li>Jusqu'à 10% de la durée contractuelle : majoration de 10%.</li>
-                            <li>Au-delà de 10% et jusqu'à 1/3 de la durée contractuelle : majoration de 25%.</li>
-                        </ul>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Rémunération HC majorées = Nombre d'heures x Taux Horaire x Taux de majoration
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures contractuelles hebdomadaires:</label>
-                            <input type="number" id="heures-contractuelles" class="test-input" value="28">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Taux horaire (€):</label>
-                            <input type="number" id="taux-horaire-hc" class="test-input" value="14">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre d'heures complémentaires:</label>
-                            <input type="number" id="nombre-hc" class="test-input" value="4">
-                            <button onclick="calculerHeuresComplementaires()" class="test-button">Calculer les heures complémentaires</button>
-                            <div id="resultat-hc" class="test-result"></div>
-                            <div id="justification-hc" class="justification-box hidden"></div>
-                        </div>
-                        <hr>
-                        <h4 class="font-bold text-yellow-700">Heures supplémentaires (temps plein)</h4>
-                        <p>Elles sont effectuées au-delà de 35h. La majoration légale est :</p>
-                        <ul class="list-disc list-inside">
-                            <li>De la 36ème à la 43ème heure : majoration de 25%.</li>
-                            <li>À partir de la 44ème heure : majoration de 50%.</li>
-                        </ul>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Rémunération HS majorées = Nombre d'heures x Taux Horaire x Taux de majoration
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures totales travaillées:</label>
-                            <input type="number" id="heures-totales-hs" class="test-input" value="40">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Taux horaire (€):</label>
-                            <input type="number" id="taux-horaire-hs" class="test-input" value="15">
-                            <button onclick="calculerHeuresSupplementaires()" class="test-button">Calculer les heures supplémentaires</button>
-                            <div id="resultat-hs" class="test-result"></div>
-                            <div id="justification-hs" class="justification-box hidden"></div>
-                        </div>
+                    <hr>
+                    <h4 class="font-bold text-yellow-700">Heures complémentaires (temps partiel)</h4>
+                    <p>Elles sont effectuées au-delà du contrat, mais en deçà des 35h. Elles sont majorées selon la loi :</p>
+                    <ul class="list-disc list-inside">
+                        <li>Jusqu'à 10% de la durée contractuelle : majoration de 10%.</li>
+                        <li>Au-delà de 10% et jusqu'à 1/3 de la durée contractuelle : majoration de 25%.</li>
+                    </ul>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Rémunération HC majorées = Nombre d'heures x Taux Horaire x Taux de majoration
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Heures contractuelles hebdomadaires:</label>
+                        <input type="number" id="heures-contractuelles" class="test-input" value="28">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Taux horaire (€):</label>
+                        <input type="number" id="taux-horaire-hc" class="test-input" value="14">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Nombre d'heures complémentaires:</label>
+                        <input type="number" id="nombre-hc" class="test-input" value="4">
+                        <button onclick="calculerHeuresComplementaires()" class="test-button">Calculer les heures complémentaires</button>
+                        <div id="resultat-hc" class="test-result"></div>
+                        <div id="justification-hc" class="justification-box hidden"></div>
+                    </div>
+                    <hr>
+                    <h4 class="font-bold text-yellow-700">Heures supplémentaires (temps plein)</h4>
+                    <p>Elles sont effectuées au-delà de 35h. La majoration légale est :</p>
+                    <ul class="list-disc list-inside">
+                        <li>De la 36ème à la 43ème heure : majoration de 25%.</li>
+                        <li>À partir de la 44ème heure : majoration de 50%.</li>
+                    </ul>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Rémunération HS majorées = Nombre d'heures x Taux Horaire x Taux de majoration
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Heures totales travaillées:</label>
+                        <input type="number" id="heures-totales-hs" class="test-input" value="40">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Taux horaire (€):</label>
+                        <input type="number" id="taux-horaire-hs" class="test-input" value="15">
+                        <button onclick="calculerHeuresSupplementaires()" class="test-button">Calculer les heures supplémentaires</button>
+                        <div id="resultat-hs" class="test-result"></div>
+                        <div id="justification-hs" class="justification-box hidden"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Section 3: Méthodes de décompte des absences -->
-            <div class="accordion-item" id="accordion-item-3">
-                <div class="accordion-header flex justify-between items-center bg-orange-50 hover:bg-orange-100">
+            <div id="section-absences" class="content-section hidden">
+                <div class="prose max-w-none text-gray-700">
                     <h3 class="text-xl font-bold text-orange-700">3. Méthodes de décompte des absences</h3>
-                    <svg class="chevron-down w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content">
+                    <hr>
                     <!-- Heures réelles -->
-                    <div class="prose max-w-none text-gray-700">
-                        <h4 class="font-bold text-orange-700">Méthode 1 : Heures réelles du mois (recommandée par la jurisprudence)</h4>
-                        <p>Cette méthode, validée par la Cour de cassation, est la plus juste car elle respecte la proportionnalité entre le temps non travaillé et le salaire.</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Retenue = Salaire mensuel × (Heures d'absence / Heures réellement prévues dans le mois)
-                        </p>
-                        <p><strong>Explication :</strong> On divise le salaire par le nombre d'heures qui auraient dû être travaillées ce mois-ci, puis on multiplie par les heures d'absence.</p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
-                            <input type="number" id="salaire-mensuel-hr" class="test-input" value="2500">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures réelles du mois:</label>
-                            <input type="number" id="heures-reelles-hr" class="test-input" value="160">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures d'absence:</label>
-                            <input type="number" id="heures-absence-hr" class="test-input" value="8">
-                            <button onclick="calculerHeuresReelles()" class="test-button">Calculer la retenue</button>
-                            <div id="resultat-hr" class="test-result"></div>
-                            <div id="justification-hr" class="justification-box hidden"></div>
-                        </div>
+                    <h4 class="font-bold text-orange-700">Méthode 1 : Heures réelles du mois (recommandée par la jurisprudence)</h4>
+                    <p>Cette méthode, validée par la Cour de cassation, est la plus juste car elle respecte la proportionnalité entre le temps non travaillé et le salaire.</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Retenue = Salaire mensuel × (Heures d'absence / Heures réellement prévues dans le mois)
+                    </p>
+                    <p><strong>Explication :</strong> On divise le salaire par le nombre d'heures qui auraient dû être travaillées ce mois-ci, puis on multiplie par les heures d'absence.</p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
+                        <input type="number" id="salaire-mensuel-hr" class="test-input" value="2500">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Heures réelles du mois:</label>
+                        <input type="number" id="heures-reelles-hr" class="test-input" value="160">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Heures d'absence:</label>
+                        <input type="number" id="heures-absence-hr" class="test-input" value="8">
+                        <button onclick="calculerHeuresReelles()" class="test-button">Calculer la retenue</button>
+                        <div id="resultat-hr" class="test-result"></div>
+                        <div id="justification-hr" class="justification-box hidden"></div>
                     </div>
                     <hr>
                     <!-- Heures moyennes -->
-                    <div class="prose max-w-none text-gray-700">
-                        <h4 class="font-bold text-orange-700">Méthode 2 : Heures moyennes du mois (mensualisation)</h4>
-                        <p>Cette méthode forfaitaire utilise un nombre d'heures moyen par mois (ex. 151,67 h pour un 35 h) pour le calcul.</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Retenue = Salaire mensuel × (Heures d'absence / Heures forfaitaires de référence)
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
-                            <input type="number" id="salaire-mensuel-hm" class="test-input" value="2500">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures forfaitaires de référence:</label>
-                            <input type="number" id="heures-forfaitaires" class="test-input" value="151.67">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures d'absence:</label>
-                            <input type="number" id="heures-absence-hm" class="test-input" value="8">
-                            <button onclick="calculerHeuresMoyennes()" class="test-button">Calculer la retenue</button>
-                            <div id="resultat-hm" class="test-result"></div>
-                            <div id="justification-hm" class="justification-box hidden"></div>
-                        </div>
+                    <h4 class="font-bold text-orange-700">Méthode 2 : Heures moyennes du mois (mensualisation)</h4>
+                    <p>Cette méthode forfaitaire utilise un nombre d'heures moyen par mois (ex. 151,67 h pour un 35 h) pour le calcul.</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Retenue = Salaire mensuel × (Heures d'absence / Heures forfaitaires de référence)
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
+                        <input type="number" id="salaire-mensuel-hm" class="test-input" value="2500">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Heures forfaitaires de référence:</label>
+                        <input type="number" id="heures-forfaitaires" class="test-input" value="151.67">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Heures d'absence:</label>
+                        <input type="number" id="heures-absence-hm" class="test-input" value="8">
+                        <button onclick="calculerHeuresMoyennes()" class="test-button">Calculer la retenue</button>
+                        <div id="resultat-hm" class="test-result"></div>
+                        <div id="justification-hm" class="justification-box hidden"></div>
                     </div>
                     <hr>
                     <!-- Jours ouvrés réels -->
-                    <div class="prose max-w-none text-gray-700">
-                        <h4 class="font-bold text-orange-700">Méthode 3 : Jours ouvrés réels</h4>
-                        <p>Le décompte se base sur les jours où l'entreprise est ouverte (lundi au vendredi, hors jours fériés).</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Retenue = Salaire mensuel × (Jours d'absence / Nombre réel de jours ouvrés du mois)
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
-                            <input type="number" id="salaire-mensuel-jor" class="test-input" value="2500">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre réel de jours ouvrés du mois:</label>
-                            <input type="number" id="jours-ouvres-reels" class="test-input" value="22">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Jours d'absence:</label>
-                            <input type="number" id="jours-absence-jor" class="test-input" value="1">
-                            <button onclick="calculerJoursOuvresReels()" class="test-button">Calculer la retenue</button>
-                            <div id="resultat-jor" class="test-result"></div>
-                            <div id="justification-jor" class="justification-box hidden"></div>
-                        </div>
+                    <h4 class="font-bold text-orange-700">Méthode 3 : Jours ouvrés réels</h4>
+                    <p>Le décompte se base sur les jours où l'entreprise est ouverte (lundi au vendredi, hors jours fériés).</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Retenue = Salaire mensuel × (Jours d'absence / Nombre réel de jours ouvrés du mois)
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
+                        <input type="number" id="salaire-mensuel-jor" class="test-input" value="2500">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Nombre réel de jours ouvrés du mois:</label>
+                        <input type="number" id="jours-ouvres-reels" class="test-input" value="22">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Jours d'absence:</label>
+                        <input type="number" id="jours-absence-jor" class="test-input" value="1">
+                        <button onclick="calculerJoursOuvresReels()" class="test-button">Calculer la retenue</button>
+                        <div id="resultat-jor" class="test-result"></div>
+                        <div id="justification-jor" class="justification-box hidden"></div>
                     </div>
                     <hr>
                     <!-- Jours ouvrés moyens -->
-                    <div class="prose max-w-none text-gray-700">
-                        <h4 class="font-bold text-orange-700">Méthode 4 : Jours ouvrés moyens</h4>
-                        <p>Cette méthode standardise le calcul sur une base forfaitaire de 21,67 jours ouvrés par mois.</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Retenue = Salaire mensuel × (Jours d'absence / 21.67)
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
-                            <input type="number" id="salaire-mensuel-jom" class="test-input" value="2500">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Jours d'absence:</label>
-                            <input type="number" id="jours-absence-jom" class="test-input" value="1">
-                            <button onclick="calculerJoursOuvresMoyens()" class="test-button">Calculer la retenue</button>
-                            <div id="resultat-jom" class="test-result"></div>
-                            <div id="justification-jom" class="justification-box hidden"></div>
-                        </div>
+                    <h4 class="font-bold text-orange-700">Méthode 4 : Jours ouvrés moyens</h4>
+                    <p>Cette méthode standardise le calcul sur une base forfaitaire de 21,67 jours ouvrés par mois.</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Retenue = Salaire mensuel × (Jours d'absence / 21.67)
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
+                        <input type="number" id="salaire-mensuel-jom" class="test-input" value="2500">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Jours d'absence:</label>
+                        <input type="number" id="jours-absence-jom" class="test-input" value="1">
+                        <button onclick="calculerJoursOuvresMoyens()" class="test-button">Calculer la retenue</button>
+                        <div id="resultat-jom" class="test-result"></div>
+                        <div id="justification-jom" class="justification-box hidden"></div>
                     </div>
                     <hr>
                     <!-- Jours ouvrables réels -->
-                    <div class="prose max-w-none text-gray-700">
-                        <h4 class="font-bold text-orange-700">Méthode 5 : Jours ouvrables réels</h4>
-                        <p>Cette méthode prend en compte le nombre réel de jours ouvrables du mois (lundi au samedi, hors jours fériés).</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Retenue = Salaire mensuel × (Jours d'absence / Nombre réel de jours ouvrables du mois)
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
-                            <input type="number" id="salaire-mensuel-jlr" class="test-input" value="2500">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre réel de jours ouvrables du mois:</label>
-                            <input type="number" id="jours-ouvrables-reels" class="test-input" value="26">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Jours d'absence:</label>
-                            <input type="number" id="jours-absence-jlr" class="test-input" value="1">
-                            <button onclick="calculerJoursOuvrablesReels()" class="test-button">Calculer la retenue</button>
-                            <div id="resultat-jlr" class="test-result"></div>
-                            <div id="justification-jlr" class="justification-box hidden"></div>
-                        </div>
+                    <h4 class="font-bold text-orange-700">Méthode 5 : Jours ouvrables réels</h4>
+                    <p>Cette méthode prend en compte le nombre réel de jours ouvrables du mois (lundi au samedi, hors jours fériés).</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Retenue = Salaire mensuel × (Jours d'absence / Nombre réel de jours ouvrables du mois)
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
+                        <input type="number" id="salaire-mensuel-jlr" class="test-input" value="2500">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Nombre réel de jours ouvrables du mois:</label>
+                        <input type="number" id="jours-ouvrables-reels" class="test-input" value="26">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Jours d'absence:</label>
+                        <input type="number" id="jours-absence-jlr" class="test-input" value="1">
+                        <button onclick="calculerJoursOuvrablesReels()" class="test-button">Calculer la retenue</button>
+                        <div id="resultat-jlr" class="test-result"></div>
+                        <div id="justification-jlr" class="justification-box hidden"></div>
                     </div>
                     <hr>
                     <!-- Jours ouvrables moyens -->
-                    <div class="prose max-w-none text-gray-700">
-                        <h4 class="font-bold text-orange-700">Méthode 6 : Jours ouvrables moyens</h4>
-                        <p>Utilise un forfait de 26 jours ouvrables par mois, souvent utilisé pour le calcul des congés payés.</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Retenue = Salaire mensuel × (Jours d'absence / 26)
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
-                            <input type="number" id="salaire-mensuel-jlm" class="test-input" value="2500">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Jours d'absence:</label>
-                            <input type="number" id="jours-absence-jlm" class="test-input" value="1">
-                            <button onclick="calculerJoursOuvrablesMoyens()" class="test-button">Calculer la retenue</button>
-                            <div id="resultat-jlm" class="test-result"></div>
-                            <div id="justification-jlm" class="justification-box hidden"></div>
-                        </div>
+                    <h4 class="font-bold text-orange-700">Méthode 6 : Jours ouvrables moyens</h4>
+                    <p>Utilise un forfait de 26 jours ouvrables par mois, souvent utilisé pour le calcul des congés payés.</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Retenue = Salaire mensuel × (Jours d'absence / 26)
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
+                        <input type="number" id="salaire-mensuel-jlm" class="test-input" value="2500">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Jours d'absence:</label>
+                        <input type="number" id="jours-absence-jlm" class="test-input" value="1">
+                        <button onclick="calculerJoursOuvrablesMoyens()" class="test-button">Calculer la retenue</button>
+                        <div id="resultat-jlm" class="test-result"></div>
+                        <div id="justification-jlm" class="justification-box hidden"></div>
                     </div>
                     <hr>
                     <!-- Jours calendaires réels -->
-                    <div class="prose max-w-none text-gray-700">
-                        <h4 class="font-bold text-orange-700">Méthode 7 : Jours calendaires réels</h4>
-                        <p>Cette méthode compte tous les jours du mois, y compris les week-ends et jours fériés.</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Retenue = Salaire mensuel × (Jours d'absence / Nombre réel de jours calendaires du mois)
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
-                            <input type="number" id="salaire-mensuel-jcr" class="test-input" value="2500">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre réel de jours calendaires du mois:</label>
-                            <input type="number" id="jours-calendaires-reels" class="test-input" value="30">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Jours d'absence:</label>
-                            <input type="number" id="jours-absence-jcr" class="test-input" value="1">
-                            <button onclick="calculerJoursCalendairesReels()" class="test-button">Calculer la retenue</button>
-                            <div id="resultat-jcr" class="test-result"></div>
-                            <div id="justification-jcr" class="justification-box hidden"></div>
-                        </div>
+                    <h4 class="font-bold text-orange-700">Méthode 7 : Jours calendaires réels</h4>
+                    <p>Cette méthode compte tous les jours du mois, y compris les week-ends et jours fériés.</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Retenue = Salaire mensuel × (Jours d'absence / Nombre réel de jours calendaires du mois)
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
+                        <input type="number" id="salaire-mensuel-jcr" class="test-input" value="2500">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Nombre réel de jours calendaires du mois:</label>
+                        <input type="number" id="jours-calendaires-reels" class="test-input" value="30">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Jours d'absence:</label>
+                        <input type="number" id="jours-absence-jcr" class="test-input" value="1">
+                        <button onclick="calculerJoursCalendairesReels()" class="test-button">Calculer la retenue</button>
+                        <div id="resultat-jcr" class="test-result"></div>
+                        <div id="justification-jcr" class="justification-box hidden"></div>
                     </div>
                     <hr>
                     <!-- Jours calendaires moyens -->
-                    <div class="prose max-w-none text-gray-700">
-                        <h4 class="font-bold text-orange-700">Méthode 8 : Jours calendaires moyens (Méthode du 30ᵉ)</h4>
-                        <p>Une méthode simple et forfaitaire, qui utilise une base de 30 jours, quel que soit le mois.</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Retenue = Salaire mensuel × (Jours d'absence / 30)
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
-                            <input type="number" id="salaire-mensuel-jcm" class="test-input" value="2500">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Jours d'absence:</label>
-                            <input type="number" id="jours-absence-jcm" class="test-input" value="1">
-                            <button onclick="calculerJoursCalendairesMoyens()" class="test-button">Calculer la retenue</button>
-                            <div id="resultat-jcm" class="test-result"></div>
-                            <div id="justification-jcm" class="justification-box hidden"></div>
-                        </div>
+                    <h4 class="font-bold text-orange-700">Méthode 8 : Jours calendaires moyens (Méthode du 30ᵉ)</h4>
+                    <p>Une méthode simple et forfaitaire, qui utilise une base de 30 jours, quel que soit le mois.</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Retenue = Salaire mensuel × (Jours d'absence / 30)
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel (€):</label>
+                        <input type="number" id="salaire-mensuel-jcm" class="test-input" value="2500">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Jours d'absence:</label>
+                        <input type="number" id="jours-absence-jcm" class="test-input" value="1">
+                        <button onclick="calculerJoursCalendairesMoyens()" class="test-button">Calculer la retenue</button>
+                        <div id="resultat-jcm" class="test-result"></div>
+                        <div id="justification-jcm" class="justification-box hidden"></div>
                     </div>
                     <hr>
                     <!-- Forfait jour -->
-                    <div class="prose max-w-none text-gray-700">
-                        <h4 class="font-bold text-orange-700">Forfait jour</h4>
-                        <p>Pour les cadres au forfait jour, la retenue pour absence se fait sur la valeur d'une journée de travail. La méthode la plus courante est la valorisation de l'absence sur le nombre de jours ouvrés du mois.</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Valeur d'une journée = Salaire Annuel / Nombre de jours du forfait
-                        </p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Retenue = Valeur d'une journée x Nombre de jours d'absence
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire Annuel (€):</label>
-                            <input type="number" id="salaire-annuel-forfait" class="test-input" value="45000">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de jours du forfait (ex: 218):</label>
-                            <input type="number" id="jours-forfait" class="test-input" value="218">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de jours d'absence:</label>
-                            <input type="number" id="jours-absence-forfait" class="test-input" value="5">
-                            <button onclick="calculerRetenueForfaitJour()" class="test-button">Calculer la retenue</button>
-                            <div id="resultat-forfait" class="test-result"></div>
-                            <div id="justification-forfait" class="justification-box hidden"></div>
-                        </div>
+                    <h4 class="font-bold text-orange-700">Forfait jour</h4>
+                    <p>Pour les cadres au forfait jour, la retenue pour absence se fait sur la valeur d'une journée de travail. La méthode la plus courante est la valorisation de l'absence sur le nombre de jours ouvrés du mois.</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Valeur d'une journée = Salaire Annuel / Nombre de jours du forfait
+                    </p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Retenue = Valeur d'une journée x Nombre de jours d'absence
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Salaire Annuel (€):</label>
+                        <input type="number" id="salaire-annuel-forfait" class="test-input" value="45000">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de jours du forfait (ex: 218):</label>
+                        <input type="number" id="jours-forfait" class="test-input" value="218">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de jours d'absence:</label>
+                        <input type="number" id="jours-absence-forfait" class="test-input" value="5">
+                        <button onclick="calculerRetenueForfaitJour()" class="test-button">Calculer la retenue</button>
+                        <div id="resultat-forfait" class="test-result"></div>
+                        <div id="justification-forfait" class="justification-box hidden"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Section 4: IJSS (Indemnités Journalières de Sécurité Sociale) -->
-            <div class="accordion-item" id="accordion-item-4">
-                <div class="accordion-header flex justify-between items-center bg-amber-50 hover:bg-amber-100">
+            <div id="section-ijss" class="content-section hidden">
+                <div class="prose max-w-none text-gray-700">
                     <h3 class="text-xl font-bold text-amber-700">4. IJSS (Indemnités Journalières)</h3>
-                    <svg class="chevron-down w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content">
-                    <div class="prose max-w-none text-gray-700">
-                        <h4 class="font-bold text-amber-700">IJSS maladie non professionnelle</h4>
-                        <p>Elles sont versées après 3 jours de carence. Elles correspondent à 50% du salaire journalier de référence (SJR), calculé sur les 3 derniers mois de salaire brut, dans la limite de 1,8 SMIC mensuels.</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            IJSS Brutes = (Somme des salaires bruts des 3 derniers mois / 91,25) x 50%
-                        </p>
-                        <hr>
-                        <h4 class="font-bold text-amber-700">IJSS autres motifs</h4>
-                        <p>Pour les IJSS spécifiques, le calcul est adapté en fonction du motif :</p>
-                        <ul class="list-disc list-inside">
-                            <li><strong>Maternité, Paternité, Adoption :</strong> 100% du SJR, versées sans délai de carence.</li>
-                            <li><strong>Accident du travail ou Maladie professionnelle :</strong> 60% du SJR les 28 premiers jours, puis 80% ensuite, sans délai de carence.</li>
-                        </ul>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            IJSS Brutes = (Salaire journalier de référence) x Taux
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Type d'absence:</label>
-                            <select id="type-ijss" class="test-input">
-                                <option value="maladie">Maladie (non pro.)</option>
-                                <option value="atmp">Accident du travail / Maladie pro.</option>
-                                <option value="matpatadop">Maternité / Paternité / Adoption</option>
-                            </select>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Somme des salaires bruts de référence (€):</label>
-                            <input type="number" id="salaire-ref" class="test-input" value="6000">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de jours d'absence:</label>
-                            <input type="number" id="jours-absence-ijss" class="test-input" value="10">
-                            <button onclick="calculerIJSS()" class="test-button">Calculer les IJSS</button>
-                            <div id="resultat-ijss" class="test-result"></div>
-                            <div id="justification-ijss" class="justification-box hidden"></div>
-                        </div>
+                    <hr>
+                    <h4 class="font-bold text-amber-700">IJSS maladie non professionnelle</h4>
+                    <p>Elles sont versées après 3 jours de carence. Elles correspondent à 50% du salaire journalier de référence (SJR), calculé sur les 3 derniers mois de salaire brut, dans la limite de 1,8 SMIC mensuels.</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        IJSS Brutes = (Somme des salaires bruts des 3 derniers mois / 91,25) x 50%
+                    </p>
+                    <hr>
+                    <h4 class="font-bold text-amber-700">IJSS autres motifs</h4>
+                    <p>Pour les IJSS spécifiques, le calcul est adapté en fonction du motif :</p>
+                    <ul class="list-disc list-inside">
+                        <li><strong>Maternité, Paternité, Adoption :</strong> 100% du SJR, versées sans délai de carence.</li>
+                        <li><strong>Accident du travail ou Maladie professionnelle :</strong> 60% du SJR les 28 premiers jours, puis 80% ensuite, sans délai de carence.</li>
+                    </ul>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        IJSS Brutes = (Salaire journalier de référence) x Taux
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Type d'absence:</label>
+                        <select id="type-ijss" class="test-input">
+                            <option value="maladie">Maladie (non pro.)</option>
+                            <option value="atmp">Accident du travail / Maladie pro.</option>
+                            <option value="matpatadop">Maternité / Paternité / Adoption</option>
+                        </select>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Somme des salaires bruts de référence (€):</label>
+                        <input type="number" id="salaire-ref" class="test-input" value="6000">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de jours d'absence:</label>
+                        <input type="number" id="jours-absence-ijss" class="test-input" value="10">
+                        <button onclick="calculerIJSS()" class="test-button">Calculer les IJSS</button>
+                        <div id="resultat-ijss" class="test-result"></div>
+                        <div id="justification-ijss" class="justification-box hidden"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Nouvelle Section 5: Maintien de salaire légal -->
-            <div class="accordion-item" id="accordion-item-5">
-                <div class="accordion-header flex justify-between items-center bg-violet-50 hover:bg-violet-100">
+            <div id="section-maintien" class="content-section hidden">
+                <div class="prose max-w-none text-gray-700">
                     <h3 class="text-xl font-bold text-violet-700">5. Maintien de salaire légal</h3>
-                    <svg class="chevron-down w-6 h-6 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content">
-                    <div class="prose max-w-none text-gray-700">
-                        <p>Selon l’article L1226-1 du Code du travail, l’employeur doit compléter les indemnités journalières de la Sécurité sociale (IJSS) afin d’assurer au salarié une rémunération minimale, sous certaines conditions.</p>
-                        <h4 class="font-bold text-violet-700">Conditions pour bénéficier du maintien légal</h4>
-                        <ul class="list-disc list-inside">
-                            <li>Avoir au moins 1 an d’ancienneté dans l’entreprise (au premier jour de l’absence).</li>
-                            <li>Avoir transmis à l’employeur le certificat médical dans les 48 heures.</li>
-                            <li>Bénéficier des indemnités journalières de la Sécurité sociale.</li>
-                            <li>Ne pas être un salarié saisonnier, intermittent ou temporaire.</li>
-                        </ul>
-                        <hr>
-                        <h4 class="font-bold text-violet-700">Formule du maintien légal</h4>
-                        <p>Le salarié perçoit une indemnité complémentaire qui, ajoutée aux IJSS, permet d’atteindre une partie de son salaire brut habituel.</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Montant du complément = (% du salaire de référence) - IJSS journalières
-                        </p>
-                        <p><strong>Salaire de référence :</strong> La moyenne brute des 3 mois précédant l’arrêt (ou 12 si plus favorable).</p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire brut moyen mensuel (€):</label>
-                            <input type="number" id="salaire-brut-moyen" class="test-input" value="3000">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">IJSS journalières (€):</label>
-                            <input type="number" id="ijss-journalieres" class="test-input" value="50">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de jours d'arrêt:</label>
-                            <input type="number" id="jours-arret" class="test-input" value="10">
-                            <button onclick="calculerMaintienSalaire()" class="test-button">Calculer le maintien</button>
-                            <div id="resultat-maintien" class="test-result"></div>
-                            <div id="justification-maintien" class="justification-box hidden"></div>
-                        </div>
+                    <hr>
+                    <p>Selon l’article L1226-1 du Code du travail, l’employeur doit compléter les indemnités journalières de la Sécurité sociale (IJSS) afin d’assurer au salarié une rémunération minimale, sous certaines conditions.</p>
+                    <h4 class="font-bold text-violet-700">Conditions pour bénéficier du maintien légal</h4>
+                    <ul class="list-disc list-inside">
+                        <li>Avoir au moins 1 an d’ancienneté dans l’entreprise (au premier jour de l’absence).</li>
+                        <li>Avoir transmis à l’employeur le certificat médical dans les 48 heures.</li>
+                        <li>Bénéficier des indemnités journalières de la Sécurité sociale.</li>
+                        <li>Ne pas être un salarié saisonnier, intermittent ou temporaire.</li>
+                    </ul>
+                    <hr>
+                    <h4 class="font-bold text-violet-700">Formule du maintien légal</h4>
+                    <p>Le salarié perçoit une indemnité complémentaire qui, ajoutée aux IJSS, permet d’atteindre une partie de son salaire brut habituel.</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Montant du complément = (% du salaire de référence) - IJSS journalières
+                    </p>
+                    <p><strong>Salaire de référence :</strong> La moyenne brute des 3 mois précédant l’arrêt (ou 12 si plus favorable).</p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Salaire brut moyen mensuel (€):</label>
+                        <input type="number" id="salaire-brut-moyen" class="test-input" value="3000">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">IJSS journalières (€):</label>
+                        <input type="number" id="ijss-journalieres" class="test-input" value="50">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de jours d'arrêt:</label>
+                        <input type="number" id="jours-arret" class="test-input" value="10">
+                        <button onclick="calculerMaintienSalaire()" class="test-button">Calculer le maintien</button>
+                        <div id="resultat-maintien" class="test-result"></div>
+                        <div id="justification-maintien" class="justification-box hidden"></div>
                     </div>
                 </div>
             </div>
 
             <!-- Section 6: Avantages en nature -->
-            <div class="accordion-item" id="accordion-item-6">
-                <div class="accordion-header flex justify-between items-center bg-stone-50 hover:bg-stone-100">
+            <div id="section-avantages" class="content-section hidden">
+                <div class="prose max-w-none text-gray-700">
                     <h3 class="text-xl font-bold text-stone-700">6. Avantages en nature</h3>
-                    <svg class="chevron-down w-6 h-6 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content">
-                    <div class="prose max-w-none text-gray-700">
-                        <h4 class="font-bold text-stone-700">Logement</h4>
-                        <p>L'évaluation forfaitaire se base sur le salaire brut et le nombre de pièces du logement. Un barème est mis à jour chaque année par l'URSSAF.</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Valeur Forfaitaire = Montant du barème par pièce x Nombre de pièces
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul (Logement)</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Montant du barème par pièce (€):</label>
-                            <input type="number" id="montant-logement" class="test-input" value="80">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de pièces:</label>
-                            <input type="number" id="nombre-pieces" class="test-input" value="3">
-                            <button onclick="calculerAvantageLogement()" class="test-button">Calculer la valeur</button>
-                            <div id="resultat-logement" class="test-result"></div>
-                            <div id="justification-logement" class="justification-box hidden"></div>
-                        </div>
-                        <hr>
-                        <h4 class="font-bold text-stone-700">Nourriture</h4>
-                        <p>L'évaluation forfaitaire est fixée annuellement par l'URSSAF, sauf si le salarié paie au moins la moitié de l'évaluation forfaitaire.</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Avantage en nature nourriture = (Évaluation forfaitaire - Participation du salarié) x Nombre de repas
-                        </p>
-                         <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul (Nourriture)</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Évaluation forfaitaire (€):</label>
-                            <input type="number" id="eval-forfaitaire" class="test-input" value="5.35">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Participation du salarié (€):</label>
-                            <input type="number" id="participation-salarie" class="test-input" value="2">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de repas:</label>
-                            <input type="number" id="nombre-repas" class="test-input" value="20">
-                            <button onclick="calculerAvantageNourriture()" class="test-button">Calculer la valeur</button>
-                            <div id="resultat-nourriture" class="test-result"></div>
-                            <div id="justification-nourriture" class="justification-box hidden"></div>
-                        </div>
+                    <hr>
+                    <h4 class="font-bold text-stone-700">Logement</h4>
+                    <p>L'évaluation forfaitaire se base sur le salaire brut et le nombre de pièces du logement. Un barème est mis à jour chaque année par l'URSSAF.</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Valeur Forfaitaire = Montant du barème par pièce x Nombre de pièces
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul (Logement)</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Montant du barème par pièce (€):</label>
+                        <input type="number" id="montant-logement" class="test-input" value="80">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de pièces:</label>
+                        <input type="number" id="nombre-pieces" class="test-input" value="3">
+                        <button onclick="calculerAvantageLogement()" class="test-button">Calculer la valeur</button>
+                        <div id="resultat-logement" class="test-result"></div>
+                        <div id="justification-logement" class="justification-box hidden"></div>
+                    </div>
+                    <hr>
+                    <h4 class="font-bold text-stone-700">Nourriture</h4>
+                    <p>L'évaluation forfaitaire est fixée annuellement par l'URSSAF, sauf si le salarié paie au moins la moitié de l'évaluation forfaitaire.</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Avantage en nature nourriture = (Évaluation forfaitaire - Participation du salarié) x Nombre de repas
+                    </p>
+                     <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul (Nourriture)</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Évaluation forfaitaire (€):</label>
+                        <input type="number" id="eval-forfaitaire" class="test-input" value="5.35">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Participation du salarié (€):</label>
+                        <input type="number" id="participation-salarie" class="test-input" value="2">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de repas:</label>
+                        <input type="number" id="nombre-repas" class="test-input" value="20">
+                        <button onclick="calculerAvantageNourriture()" class="test-button">Calculer la valeur</button>
+                        <div id="resultat-nourriture" class="test-result"></div>
+                        <div id="justification-nourriture" class="justification-box hidden"></div>
                     </div>
                 </div>
             </div>
             
             <!-- Section 7: Réduction générale des cotisations (ex-Fillon) -->
-            <div class="accordion-item" id="accordion-item-7">
-                <div class="accordion-header flex justify-between items-center bg-green-50 hover:bg-green-100">
+            <div id="section-rgcp" class="content-section hidden">
+                <div class="prose max-w-none text-gray-700">
                     <h3 class="text-xl font-bold text-green-700">7. Réduction Générale de Cotisations (RGCP)</h3>
-                    <svg class="chevron-down w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="accordion-content">
-                    <div class="prose max-w-none text-gray-700">
-                        <p>Cette réduction s'applique aux salaires inférieurs à 1,6 fois le SMIC. Elle est calculée via un coefficient. Le montant de la réduction est la rémunération brute multipliée par ce coefficient.</p>
-                        <p class="font-mono bg-gray-100 p-2 rounded-md">
-                            Coefficient = (T / 0.6) x ((1.6 x SMIC Annuel) / Rémunération Annuelle Brute - 1)
-                        </p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Rémunération Annuelle Brute (€):</label>
-                            <input type="number" id="remuneration-annuelle" class="test-input" value="22000">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">SMIC Annuel (€):</label>
-                            <input type="number" id="smic-annuel" class="test-input" value="21203.47">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Valeur T (taux de cotisations patronales):</label>
-                            <input type="number" id="valeur-t" class="test-input" value="0.3194">
-                            <button onclick="calculerRGCP()" class="test-button">Calculer le coefficient</button>
-                            <div id="resultat-rgcp" class="test-result"></div>
-                            <div id="justification-rgcp" class="justification-box hidden"></div>
-                        </div>
+                    <hr>
+                    <p>Cette réduction s'applique aux salaires inférieurs à 1,6 fois le SMIC. Elle est calculée via un coefficient. Le montant de la réduction est la rémunération brute multipliée par ce coefficient.</p>
+                    <p class="font-mono bg-gray-100 p-2 rounded-md">
+                        Coefficient = (T / 0.6) x ((1.6 x SMIC Annuel) / Rémunération Annuelle Brute - 1)
+                    </p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Rémunération Annuelle Brute (€):</label>
+                        <input type="number" id="remuneration-annuelle" class="test-input" value="22000">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">SMIC Annuel (€):</label>
+                        <input type="number" id="smic-annuel" class="test-input" value="21203.47">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Valeur T (taux de cotisations patronales):</label>
+                        <input type="number" id="valeur-t" class="test-input" value="0.3194">
+                        <button onclick="calculerRGCP()" class="test-button">Calculer le coefficient</button>
+                        <div id="resultat-rgcp" class="test-result"></div>
+                        <div id="justification-rgcp" class="justification-box hidden"></div>
                     </div>
                 </div>
             </div>
@@ -566,16 +518,35 @@
     </div>
 
     <script>
-        // Gestion des accordions
         document.addEventListener('DOMContentLoaded', () => {
-            const accordionItems = document.querySelectorAll('.accordion-item');
-            accordionItems.forEach(item => {
-                const header = item.querySelector('.accordion-header');
-                const content = item.querySelector('.accordion-content');
-                header.addEventListener('click', () => {
-                    item.classList.toggle('active');
-                    content.classList.toggle('active');
-                });
+            const sections = document.querySelectorAll('.content-section');
+            const navigationSelect = document.getElementById('navigation-select');
+            
+            // Masquer toutes les sections au début
+            sections.forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Afficher la première section par défaut
+            const premiereSection = document.getElementById('section-salaire');
+            if (premiereSection) {
+                premiereSection.classList.remove('hidden');
+            }
+
+            // Gérer le changement de la liste déroulante
+            navigationSelect.addEventListener('change', (event) => {
+                const targetId = event.target.value;
+                if (targetId) {
+                    // Masquer toutes les sections
+                    sections.forEach(section => {
+                        section.classList.add('hidden');
+                    });
+                    // Afficher la section sélectionnée
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.classList.remove('hidden');
+                    }
+                }
             });
         });
 
@@ -879,7 +850,6 @@
             `;
             justificationDiv.classList.remove('hidden');
         }
-
 
         // Fonction pour calculer les IJSS (tous les motifs)
         function calculerIJSS() {
