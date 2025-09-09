@@ -380,36 +380,50 @@
                 <div class="prose max-w-none text-gray-700">
                     <h3 class="text-xl font-bold text-amber-700">4. IJSS (Indemnités Journalières)</h3>
                     <hr>
+                    <!-- Maladie (non professionnelle) -->
                     <h4 class="font-bold text-amber-700">IJSS maladie non professionnelle</h4>
                     <p>Elles sont versées après 3 jours de carence. Elles correspondent à 50% du salaire journalier de référence (SJR), calculé sur les 3 derniers mois de salaire brut, dans la limite de 1,8 SMIC mensuels.</p>
                     <p class="font-mono bg-gray-100 p-2 rounded-md">
                         IJSS Brutes = (Somme des salaires bruts des 3 derniers mois / 91,25) x 50%
                     </p>
                     <hr>
-                    <h4 class="font-bold text-amber-700">IJSS autres motifs</h4>
+                    <!-- AT/MP et Maternité/Paternité/Adoption -->
+                    <h4 class="font-bold text-amber-700">IJSS accidents du travail et autres motifs</h4>
                     <p>Pour les IJSS spécifiques, le calcul est adapté en fonction du motif :</p>
                     <ul class="list-disc list-inside">
                         <li><strong>Maternité, Paternité, Adoption :</strong> 100% du SJR, versées sans délai de carence.</li>
                         <li><strong>Accident du travail ou Maladie professionnelle :</strong> 60% du SJR les 28 premiers jours, puis 80% ensuite, sans délai de carence.</li>
                     </ul>
-                    <p class="font-mono bg-gray-100 p-2 rounded-md">
-                        IJSS Brutes = (Salaire journalier de référence) x Taux
-                    </p>
                     <div class="test-section">
-                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul des IJSS</h4>
                         <label class="block text-sm font-medium text-gray-700 mt-2">Type d'absence:</label>
                         <select id="type-ijss" class="test-input">
                             <option value="maladie">Maladie (non pro.)</option>
                             <option value="atmp">Accident du travail / Maladie pro.</option>
                             <option value="matpatadop">Maternité / Paternité / Adoption</option>
                         </select>
-                        <label class="block text-sm font-medium text-gray-700 mt-2">Somme des salaires bruts de référence (€):</label>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Salaire de référence (€):</label>
+                        <p class="text-xs text-gray-500 mb-2">Pour "Maladie" et "Maternité/Paternité", entrez la somme des 3 derniers mois. Pour "AT/MP", entrez le salaire du mois précédent.</p>
                         <input type="number" id="salaire-ref" class="test-input" value="6000">
                         <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de jours d'absence:</label>
                         <input type="number" id="jours-absence-ijss" class="test-input" value="10">
                         <button onclick="calculerIJSS()" class="test-button">Calculer les IJSS</button>
                         <div id="resultat-ijss" class="test-result"></div>
                         <div id="justification-ijss" class="justification-box hidden"></div>
+                    </div>
+                    <hr>
+                    <!-- Indemnité temporaire d'inaptitude -->
+                    <h4 class="font-bold text-amber-700">Indemnité temporaire d'inaptitude</h4>
+                    <p>Si un accident du travail vous rend inapte, vous pouvez bénéficier de cette indemnité pendant un mois maximum. Le montant est égal à la dernière IJSS versée pour l'arrêt de travail lié à l'accident. Elle est également soumise aux prélèvements CSG/CRDS.</p>
+                    <div class="test-section">
+                        <h4 class="text-orange-600 font-bold mb-2">Tester le calcul de l'Indemnité d'inaptitude</h4>
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Dernière IJSS AT-MP versée (€):</label>
+                        <input type="number" id="derniere-ijss-atmp" class="test-input" value="50.00">
+                        <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de jours de l'inaptitude:</label>
+                        <input type="number" id="jours-inaptitude" class="test-input" value="20">
+                        <button onclick="calculerITI()" class="test-button">Calculer l'indemnité</button>
+                        <div id="resultat-iti" class="test-result"></div>
+                        <div id="justification-iti" class="justification-box hidden"></div>
                     </div>
                 </div>
             </div>
@@ -859,47 +873,66 @@
             const resultatDiv = document.getElementById('resultat-ijss');
             const justificationDiv = document.getElementById('justification-ijss');
 
-            let sjr, ijssJournalieres, totalIJSS, carence, explication;
-            
-            // Calcul du Salaire Journalier de Référence (SJR)
-            if (typeIJSS === 'maladie') {
+            let sjr, ijssJournalieres, totalIJSS, carence, explication, calculDetaille;
+
+            // Déterminer la base du SJR en fonction du type d'IJSS
+            if (typeIJSS === 'atmp') {
+                sjr = salaireRef / 30.42;
+            } else {
                 sjr = salaireRef / 91.25;
-            } else if (typeIJSS === 'atmp' || typeIJSS === 'matpatadop') {
-                // Simplification : le SJR est la moyenne des 12 derniers mois de salaire brut, plafonné
-                // Ici, on utilise le salaireRef fourni pour simplifier
-                sjr = salaireRef / 365.25;
             }
+
+            const plafondIJSS_ATMP_28j = 235.69;
+            const plafondIJSS_ATMP_plus_28j = 314.25;
             
             switch(typeIJSS) {
                 case 'maladie':
                     carence = 3;
                     ijssJournalieres = sjr * 0.50;
                     totalIJSS = (joursAbsence > carence) ? ijssJournalieres * (joursAbsence - carence) : 0;
-                    explication = `<p>Les IJSS maladie non professionnelle sont versées après un délai de carence de 3 jours et correspondent à 50% du salaire journalier de référence (SJR).</p>`;
+                    explication = `<p>Les IJSS maladie non professionnelle sont versées après un délai de carence de 3 jours et correspondent à 50% du salaire journalier de référence (SJR), plafonné à 1,8 SMIC.</p>`;
+                    calculDetaille = `<p><strong>Calcul :</strong><br>
+                    SJR = ${salaireRef.toFixed(2)} € / 91,25 jours = ${sjr.toFixed(2)} €<br>
+                    Total IJSS = ${ijssJournalieres.toFixed(2)} €/jour x (${joursAbsence} - ${carence}) jours = ${totalIJSS.toFixed(2)} €</p>`;
                     break;
                 case 'atmp':
                     carence = 0;
-                    // Les 28 premiers jours sont à 60%
+                    let sjrPlaf = sjr;
+                    if (sjr > plafondIJSS_ATMP_28j / 0.60) {
+                        sjrPlaf = plafondIJSS_ATMP_28j / 0.60;
+                    }
+                    
                     if (joursAbsence <= 28) {
-                        ijssJournalieres = sjr * 0.60;
+                        ijssJournalieres = sjrPlaf * 0.60;
                         totalIJSS = ijssJournalieres * joursAbsence;
-                        explication = `<p>Les IJSS pour un accident du travail ou une maladie professionnelle sont versées sans délai de carence et correspondent à 60% du SJR pour les 28 premiers jours.</p>`;
+                        explication = `<p>Les IJSS pour un accident du travail ou une maladie professionnelle sont versées sans délai de carence et correspondent à 60% du SJR (plafonné à ${plafondIJSS_ATMP_28j} €) pour les 28 premiers jours.</p>`;
+                        calculDetaille = `<p><strong>Calcul :</strong><br>
+                        SJR = ${salaireRef.toFixed(2)} € / 30,42 jours = ${sjr.toFixed(2)} €<br>
+                        IJSS Journalières = ${sjrPlaf.toFixed(2)} € x 60% = ${ijssJournalieres.toFixed(2)} €<br>
+                        Total IJSS = ${ijssJournalieres.toFixed(2)} €/jour x ${joursAbsence} jours = ${totalIJSS.toFixed(2)} €</p>`;
                     } else {
-                        // Au-delà de 28 jours, le taux passe à 80%
-                        const ijss28Jours = (sjr * 0.60) * 28;
+                        const sjrPlaf_29 = (sjr > plafondIJSS_ATMP_plus_28j / 0.80) ? plafondIJSS_ATMP_plus_28j / 0.80 : sjr;
+                        const ijss28Jours = (sjrPlaf * 0.60) * 28;
                         const joursRestants = joursAbsence - 28;
-                        const ijssJoursRestants = (sjr * 0.80) * joursRestants;
+                        const ijssJoursRestants = (sjrPlaf_29 * 0.80) * joursRestants;
                         totalIJSS = ijss28Jours + ijssJoursRestants;
                         ijssJournalieres = "Variable (60% puis 80%)";
-                        explication = `<p>Les IJSS pour un accident du travail ou une maladie professionnelle sont versées sans délai de carence, à un taux de 60% pour les 28 premiers jours, puis à 80% à partir du 29ème jour.</p>`;
+                        explication = `<p>Les IJSS pour un accident du travail ou une maladie professionnelle sont versées sans délai de carence, à un taux de 60% pour les 28 premiers jours, puis à 80% à partir du 29ème jour (plafonné à ${plafondIJSS_ATMP_plus_28j} €).</p>`;
+                        calculDetaille = `<p><strong>Calcul :</strong><br>
+                        SJR = ${salaireRef.toFixed(2)} € / 30,42 jours = ${sjr.toFixed(2)} €<br>
+                        IJSS des 28 premiers jours = (${sjrPlaf.toFixed(2)} € x 60%) x 28 jours = ${ijss28Jours.toFixed(2)} €<br>
+                        IJSS des jours restants = (${sjrPlaf_29.toFixed(2)} € x 80%) x ${joursRestants} jours = ${ijssJoursRestants.toFixed(2)} €<br>
+                        Total IJSS = ${ijss28Jours.toFixed(2)} € + ${ijssJoursRestants.toFixed(2)} € = ${totalIJSS.toFixed(2)} €</p>`;
                     }
                     break;
                 case 'matpatadop':
                     carence = 0;
-                    // Maternité, Paternité, Adoption sont à 100% du SJR
                     ijssJournalieres = sjr;
                     totalIJSS = ijssJournalieres * joursAbsence;
                     explication = `<p>Les IJSS pour la maternité, la paternité ou l'adoption sont versées sans délai de carence et correspondent à 100% du salaire journalier de référence (SJR).</p>`;
+                    calculDetaille = `<p><strong>Calcul :</strong><br>
+                    SJR = ${salaireRef.toFixed(2)} € / 91,25 jours = ${sjr.toFixed(2)} €<br>
+                    Total IJSS = ${ijssJournalieres.toFixed(2)} €/jour x ${joursAbsence} jours = ${totalIJSS.toFixed(2)} €</p>`;
                     break;
             }
 
@@ -911,9 +944,29 @@
             justificationDiv.innerHTML = `
                 <h4 class="font-bold text-purple-700">Justification du calcul :</h4>
                 ${explication}
+                ${calculDetaille}
+            `;
+            justificationDiv.classList.remove('hidden');
+        }
+
+        // Nouvelle fonction pour calculer l'indemnité temporaire d'inaptitude
+        function calculerITI() {
+            const derniereIJSS = parseFloat(document.getElementById('derniere-ijss-atmp').value);
+            const joursInaptitude = parseFloat(document.getElementById('jours-inaptitude').value);
+            const resultatDiv = document.getElementById('resultat-iti');
+            const justificationDiv = document.getElementById('justification-iti');
+
+            const totalITI = derniereIJSS * joursInaptitude;
+            
+            resultatDiv.innerHTML = `
+                <p><strong>Indemnité journalière ITI:</strong> ${derniereIJSS.toFixed(2)} €</p>
+                <p><strong>Total de l'indemnité temporaire d'inaptitude:</strong> ${totalITI.toFixed(2)} €</p>
+            `;
+            justificationDiv.innerHTML = `
+                <h4 class="font-bold text-purple-700">Justification du calcul :</h4>
+                <p>L'indemnité temporaire d'inaptitude est égale au montant de la dernière indemnité journalière versée pour l'accident du travail ayant causé l'inaptitude. Le versement se fait pour chaque jour de la période d'inaptitude, dans la limite d'un mois.</p>
                 <p><strong>Calcul :</strong><br>
-                SJR = ${salaireRef} € / ${typeIJSS === 'maladie' ? '91,25' : '365,25'} jours = ${sjr.toFixed(2)} €<br>
-                Total IJSS = ${totalIJSS.toFixed(2)} €</p>
+                Indemnité totale = ${derniereIJSS.toFixed(2)} €/jour x ${joursInaptitude} jours = ${totalITI.toFixed(2)} €</p>
             `;
             justificationDiv.classList.remove('hidden');
         }
