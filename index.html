@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-s cale=1.0">
     <title>Méthodes de Calcul en Paie</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -132,71 +132,73 @@
             <!-- Section pour les absences et congés -->
             <div class="accordion-item" id="accordion-item-absences">
                 <div class="accordion-header flex justify-between items-center bg-rose-50 hover:bg-rose-100">
-                    <h3 class="text-xl font-bold text-rose-700">Méthodes de calcul pour les absences et congés</h3>
+                    <h3 class="text-xl font-bold text-rose-700">Méthodes de calcul pour les absences</h3>
                     <svg class="chevron-down w-6 h-6 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
                 <div class="accordion-content">
                     <div class="prose max-w-none text-gray-700">
+                        <p class="mb-4">Voici un tableau récapitulatif des principales méthodes de calcul pour les retenues sur salaire en cas d'absence. Le choix de la méthode dépend de la jurisprudence, du Code du travail et des conventions collectives. La méthode des heures réelles est recommandée par la Cour de cassation car elle est la plus proportionnée.</p>
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Méthode</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Principe/Utilisation</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Formule de base</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Remarques/Exemple</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Formule</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exemple chiffré</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Référence juridique</th>
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">Heures Réelles</td>
-                                        <td class="px-6 py-4">Calcul basé sur les heures réellement travaillées du mois. Juridiquement validée.</td>
-                                        <td class="px-6 py-4">(Salaire mensuel / Heures réelles du mois) x H. d'absence</td>
-                                        <td class="px-6 py-4">Précise et équitable. Nécessite un suivi exact des heures.</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">Heures réelles</td>
+                                        <td class="px-6 py-4">Retenue = $\text{Salaire mensuel} \times \dfrac{\text{Heures d'absence}}{\text{Heures réelles du mois}}$</td>
+                                        <td class="px-6 py-4">Salaire = 2 500 €<br>Heures réelles = 160 h<br>Absence = 8 h<br><span class="font-bold">Retenue = 125,00 €</span></td>
+                                        <td class="px-6 py-4">Méthode privilégiée par la jurisprudence (Cour de cassation).</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">Durée mensuelle moyenne</td>
-                                        <td class="px-6 py-4">Moyenne uniforme de 151,67h pour un temps plein (35h).</td>
-                                        <td class="px-6 py-4">(Salaire mensuel / 151,67) x H. d'absence</td>
-                                        <td class="px-6 py-4">Uniformise le calcul pour un temps de travail hebdomadaire standard.</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">Heures moyennes</td>
+                                        <td class="px-6 py-4">Retenue = $\text{Salaire mensuel} \times \dfrac{\text{Heures d'absence}}{151,67 \text{ h}}$</td>
+                                        <td class="px-6 py-4">Salaire = 2 500 €<br>Absence = 8 h<br><span class="font-bold">Retenue = 131,87 €</span></td>
+                                        <td class="px-6 py-4">Basée sur la mensualisation (35 h/semaine). Pratique courante.</td>
                                     </tr>
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">Jours ouvrés réels</td>
-                                        <td class="px-6 py-4">Basée sur les jours ouvrés (lundi au vendredi).</td>
-                                        <td class="px-6 py-4">(Salaire / Jours ouvrés du mois) x Jours d'absence</td>
-                                        <td class="px-6 py-4">Exemple de base moyenne : 21,67 jours.</td>
+                                        <td class="px-6 py-4">Retenue = $\text{Salaire mensuel} \times \dfrac{\text{Jours d'absence}}{\text{Jours ouvrés réels du mois}}$</td>
+                                        <td class="px-6 py-4">Salaire = 2 500 €<br>Jours ouvrés = 22<br>Absence = 1 jour<br><span class="font-bold">Retenue = 113,64 €</span></td>
+                                        <td class="px-6 py-4">Applicable pour un travail sur 5 jours par semaine.</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">Jours ouvrables</td>
-                                        <td class="px-6 py-4">Basée sur les jours ouvrables (lundi au samedi).</td>
-                                        <td class="px-6 py-4">(Salaire / Jours ouvrables du mois) x Jours d'absence</td>
-                                        <td class="px-6 py-4">Utilisée pour les absences longues (maladie, etc.).</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">Jours ouvrés moyens</td>
+                                        <td class="px-6 py-4">Retenue = $\text{Salaire mensuel} \times \dfrac{\text{Jours d'absence}}{21,67}$</td>
+                                        <td class="px-6 py-4">Salaire = 2 500 €<br>Absence = 1 jour<br><span class="font-bold">Retenue = 115,37 €</span></td>
+                                        <td class="px-6 py-4">Utilise une moyenne forfaitaire (21,67 jours).</td>
                                     </tr>
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">Jours calendaires</td>
-                                        <td class="px-6 py-4">Inclut tous les jours du mois (lundi au dimanche).</td>
-                                        <td class="px-6 py-4">(Salaire / Jours du mois) x Jours d'absence</td>
-                                        <td class="px-6 py-4">Utilisée pour les absences longues (maladie, etc.).</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">Jours ouvrables réels</td>
+                                        <td class="px-6 py-4">Retenue = $\text{Salaire mensuel} \times \dfrac{\text{Jours d'absence}}{\text{Jours ouvrables réels du mois}}$</td>
+                                        <td class="px-6 py-4">Salaire = 2 500 €<br>Jours ouvrables = 26<br>Absence = 1 jour<br><span class="font-bold">Retenue = 96,15 €</span></td>
+                                        <td class="px-6 py-4">Pratique pour les congés payés.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Jours ouvrables moyens</td>
+                                        <td class="px-6 py-4">Retenue = $\text{Salaire mensuel} \times \dfrac{\text{Jours d'absence}}{26}$</td>
+                                        <td class="px-6 py-4">Salaire = 2 500 €<br>Absence = 1 jour<br><span class="font-bold">Retenue = 96,15 €</span></td>
+                                        <td class="px-6 py-4">Base forfaitaire de 26 jours.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Jours calendaires réels</td>
+                                        <td class="px-6 py-4">Retenue = $\text{Salaire mensuel} \times \dfrac{\text{Jours d'absence}}{\text{Jours calendaires du mois}}$</td>
+                                        <td class="px-6 py-4">Salaire = 2 500 €<br>Jours du mois = 30<br>Absence = 1 jour<br><span class="font-bold">Retenue = 83,33 €</span></td>
+                                        <td class="px-6 py-4">Conforme pour les absences longues (maladie).</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Jours calendaires moyens</td>
+                                        <td class="px-6 py-4">Retenue = $\text{Salaire mensuel} \times \dfrac{\text{Jours d'absence}}{30}$</td>
+                                        <td class="px-6 py-4">Salaire = 2 500 €<br>Absence = 1 jour<br><span class="font-bold">Retenue = 83,33 €</span></td>
+                                        <td class="px-6 py-4">Méthode du "1/30ème" simplifiée.</td>
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
-                        <h4 class="font-bold text-rose-700 mt-6">Cas particuliers : Congés payés</h4>
-                        <p class="font-bold text-gray-700">Méthode du Maintien de salaire</p>
-                        <p>Le salarié perçoit le salaire qu'il aurait eu s'il avait travaillé. C'est la méthode la plus simple et souvent la plus avantageuse pour le salarié.</p>
-                        <p class="font-bold text-gray-700 mt-4">Règle du dixième</p>
-                        <p>L'indemnité de congés est égale à 10% de la rémunération brute totale perçue par le salarié sur la période de référence. Le Code du Travail impose de toujours comparer les deux méthodes et de retenir la plus favorable au salarié.</p>
-                        <div class="test-section">
-                            <h4 class="text-orange-600 font-bold mb-2">Tester les méthodes de calcul d'absence</h4>
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel brut (€):</label>
-                            <input type="number" id="salaire-mensuel" class="test-input" value="2000">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures réelles du mois:</label>
-                            <input type="number" id="heures-reelles" class="test-input" value="154">
-                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures d'absence:</label>
-                            <input type="number" id="heures-absence" class="test-input" value="21">
-                            <button onclick="calculerAbsence()" class="test-button">Tester le calcul</button>
-                            <div id="resultat-absence" class="test-result"></div>
-                            <div id="justification-absence" class="justification-box hidden"></div>
                         </div>
                     </div>
                 </div>
@@ -524,7 +526,7 @@
             justificationDiv.innerHTML = `
                 <h4 class="font-bold text-purple-700">Justification du calcul :</h4>
                 <p>La Cour de cassation préconise la méthode de la <strong>retenue pour absence sur l'horaire réel</strong>. Elle consiste à calculer la valeur d'une heure de travail en divisant le salaire de base par le nombre d'heures réelles travaillées dans le mois concerné.</p>
-                <p>Ensuite, on multiplie cette valeur par le nombre d'heures d'absence. Cette méthode est considérée comme la plus juste car elle reflète la valeur exacte de chaque heure de travail du mois.</p>
+                <p>Ensuite, on multiplie cette valeur par le nombre d'heures d'absence pour trouver le montant exact à retenir sur le salaire.</p>
                 <p><strong>Calcul :</strong><br>
                 Valeur de l'heure = ${salaireMensuel} € / ${heuresReelles} h = ${(salaireMensuel / heuresReelles).toFixed(2)} €<br>
                 Retenue = ${(salaireMensuel / heuresReelles).toFixed(2)} € x ${heuresAbsence} h = ${retenue.toFixed(2)} €</p>
