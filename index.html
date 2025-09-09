@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Méthodes de Calcul en Paie</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fefce8;
+            color: #4a5568;
+        }
+        .container {
+            max-width: 900px;
+        }
+        .content-card {
+            background-color: #fff;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            border: 1px solid #fecdd3;
+        }
+        .accordion-item {
+            background-color: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #fecdd3;
+        }
+        .accordion-header {
+            cursor: pointer;
+            padding: 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #fecdd3;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .accordion-header:hover {
+            background-color: #ffe4e6;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+            padding: 0 1.25rem;
+        }
+        .accordion-content.active {
+            max-height: 2000px;
+            padding: 1.25rem;
+        }
+        .chevron-down {
+            transition: transform 0.3s ease;
+        }
+        .accordion-item.active .chevron-down {
+            transform: rotate(180deg);
+        }
+        .prose h4 {
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .prose p {
+            margin-bottom: 0.5rem;
+        }
+        .test-section {
+            background-color: #fcf6e8;
+            border-left: 4px solid #f59e0b;
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-radius: 0.5rem;
+        }
+        .test-input {
+            width: 100%;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+            margin-top: 0.5rem;
+        }
+        .test-button {
+            background-color: #f59e0b;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .test-button:hover {
+            background-color: #d97706;
+        }
+        .test-result {
+            margin-top: 1rem;
+            font-weight: 600;
+            color: #d97706;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            text-align: left;
+        }
+    </style>
+</head>
+<body class="p-6">
+
+    <div class="container mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-pink-700 mb-2">
+                Boîte à Outils : Méthodes de Calcul 🧮
+            </h1>
+            <p class="text-lg sm:text-xl text-gray-600 font-medium">
+                Un recueil des formules et des exemples pour maîtriser les calculs clés en paie.
+            </p>
+            <hr class="w-24 h-1 mx-auto my-4 bg-orange-400 border-0 rounded">
+        </header>
+
+        <main class="space-y-6">
+
+            <!-- Section pour les absences et congés -->
+            <div class="accordion-item" id="accordion-item-absences">
+                <div class="accordion-header flex justify-between items-center bg-rose-50 hover:bg-rose-100">
+                    <h3 class="text-xl font-bold text-rose-700">Méthodes de calcul pour les absences et congés</h3>
+                    <svg class="chevron-down w-6 h-6 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="accordion-content">
+                    <div class="prose max-w-none text-gray-700">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Méthode</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Principe/Utilisation</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Formule de base</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Remarques/Exemple</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Heures Réelles</td>
+                                        <td class="px-6 py-4">Calcul basé sur les heures réellement travaillées du mois. Juridiquement validée.</td>
+                                        <td class="px-6 py-4">(Salaire mensuel / Heures réelles du mois) x H. d'absence</td>
+                                        <td class="px-6 py-4">Précise et équitable. Nécessite un suivi exact des heures.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Durée mensuelle moyenne</td>
+                                        <td class="px-6 py-4">Moyenne uniforme de 151,67h pour un temps plein (35h).</td>
+                                        <td class="px-6 py-4">(Salaire mensuel / 151,67) x H. d'absence</td>
+                                        <td class="px-6 py-4">Uniformise le calcul pour un temps de travail hebdomadaire standard.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Jours ouvrés réels</td>
+                                        <td class="px-6 py-4">Basée sur les jours ouvrés (lundi au vendredi).</td>
+                                        <td class="px-6 py-4">(Salaire / Jours ouvrés du mois) x Jours d'absence</td>
+                                        <td class="px-6 py-4">Exemple de base moyenne : 21,67 jours.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Jours ouvrables</td>
+                                        <td class="px-6 py-4">Basée sur les jours ouvrables (lundi au samedi).</td>
+                                        <td class="px-6 py-4">(Salaire / Jours ouvrables du mois) x Jours d'absence</td>
+                                        <td class="px-6 py-4">Exemple de base moyenne : 26 jours.</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Jours calendaires</td>
+                                        <td class="px-6 py-4">Inclut tous les jours du mois (lundi au dimanche).</td>
+                                        <td class="px-6 py-4">(Salaire / Jours du mois) x Jours d'absence</td>
+                                        <td class="px-6 py-4">Utilisée pour les absences longues (maladie, etc.).</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h4 class="font-bold text-rose-700 mt-6">Cas particuliers : Congés payés</h4>
+                        <p class="font-bold text-gray-700">Méthode du Maintien de salaire</p>
+                        <p>Le salarié perçoit le salaire qu'il aurait eu s'il avait travaillé. C'est la méthode la plus simple et souvent la plus avantageuse pour le salarié.</p>
+                        <p class="font-bold text-gray-700 mt-4">Règle du dixième</p>
+                        <p>L'indemnité de congés est égale à 10% de la rémunération brute totale perçue par le salarié sur la période de référence. Le Code du Travail impose de toujours comparer les deux méthodes et de retenir la plus favorable au salarié.</p>
+                        <div class="test-section">
+                            <h4 class="text-orange-600 font-bold mb-2">Tester les méthodes de calcul d'absence</h4>
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel brut (€):</label>
+                            <input type="number" id="salaire-mensuel" class="test-input" value="2000">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures réelles du mois:</label>
+                            <input type="number" id="heures-reelles" class="test-input" value="154">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures d'absence:</label>
+                            <input type="number" id="heures-absence" class="test-input" value="21">
+                            <button onclick="calculerAbsence()" class="test-button">Tester le calcul</button>
+                            <div id="resultat-absence" class="test-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section pour les cotisations sociales -->
+            <div class="accordion-item" id="accordion-item-cotisations">
+                <div class="accordion-header flex justify-between items-center bg-orange-50 hover:bg-orange-100">
+                    <h3 class="text-xl font-bold text-orange-700">Tableau des calculs de cotisations sociales</h3>
+                    <svg class="chevron-down w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="accordion-content">
+                    <div class="prose max-w-none text-gray-700">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cotisation</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Base de calcul</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Taux</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Exemple</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Maladie</td>
+                                        <td class="px-6 py-4">Salaire brut total</td>
+                                        <td class="px-6 py-4">7% (employeur)</td>
+                                        <td class="px-6 py-4">2000 € x 7% = 140 €</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Vieillesse (Plafonnée)</td>
+                                        <td class="px-6 py-4">Salaire brut ≤ PMSS (3925 €/mois)</td>
+                                        <td class="px-6 py-4">6,90% (salarié) / 8,55% (employeur)</td>
+                                        <td class="px-6 py-4">Pour 3800 €: 3800 € x 6,9% = 262,20 €</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Vieillesse (Déplafonnée)</td>
+                                        <td class="px-6 py-4">Salaire brut total</td>
+                                        <td class="px-6 py-4">0,40% (salarié) / 1,90% (employeur)</td>
+                                        <td class="px-6 py-4">Pour 4500 € : 4500 € x 0,4% = 18 €</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">CSG/CRDS</td>
+                                        <td class="px-6 py-4">98,25% du brut (abattement 1,75%)</td>
+                                        <td class="px-6 py-4">9,2% (CSG) + 0,5% (CRDS)</td>
+                                        <td class="px-6 py-4">Pour 3000 € brut : (3000 € x 98,25%) x 9,7% = 285,95 €</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">Chômage</td>
+                                        <td class="px-6 py-4">Salaire brut total</td>
+                                        <td class="px-6 py-4">2,40% (employeur)</td>
+                                        <td class="px-6 py-4">2000 € x 2,4% = 48 €</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <h4 class="font-bold text-orange-700 mt-6">Détails sur l'abattement de la base CSG/CRDS</h4>
+                        <p>L'abattement de 1,75% s'applique sur la rémunération brute pour déterminer la base de la CSG/CRDS. Il a une limite, fixée à 4 fois le plafond annuel de la Sécurité sociale. Au-delà de ce plafond, l'abattement ne s'applique plus, et la base de calcul est alors l'intégralité du salaire brut.</p>
+                        <h4 class="font-bold text-orange-700 mt-6">Points de vigilance</h4>
+                        <p>Les taux et les bases de calcul des cotisations peuvent varier en fonction de la convention collective de l'entreprise ou des décrets en vigueur. Il est donc essentiel de rester informé pour garantir la conformité des bulletins de paie.</p>
+                        <div class="test-section">
+                            <h4 class="text-orange-600 font-bold mb-2">Tester les calculs de cotisations</h4>
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire mensuel brut (€):</label>
+                            <input type="number" id="salaire-brut-cotis" class="test-input" value="3000">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">PMSS (€):</label>
+                            <input type="number" id="pmss" class="test-input" value="3925">
+                            <button onclick="calculerCotisations()" class="test-button">Tester le calcul</button>
+                            <div id="resultat-cotisations" class="test-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 1: Salaire de base et horaire -->
+            <div class="accordion-item" id="accordion-item-1">
+                <div class="accordion-header flex justify-between items-center bg-stone-50 hover:bg-stone-100">
+                    <h3 class="text-xl font-bold text-stone-700">1. Salaire de base et horaire</h3>
+                    <svg class="chevron-down w-6 h-6 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="accordion-content">
+                    <div class="prose max-w-none text-gray-700">
+                        <h4 class="font-bold text-stone-700">Durée mensuelle moyenne</h4>
+                        <p>La durée légale du travail est de 35 heures par semaine. Pour obtenir une moyenne mensuelle, on applique la formule de mensualisation :</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded-md">
+                            (Heures Hebdomadaires x 52 Semaines) / 12 Mois
+                        </p>
+                        <p><strong>Exemple :</strong> Pour un contrat de 35h/semaine : (35 x 52) / 12 = 151,67 heures.</p>
+                        <hr>
+                        <h4 class="font-bold text-stone-700">Salaire de base</h4>
+                        <p>Le salaire de base est le montant fixe que perçoit un salarié. Il se calcule en multipliant son horaire mensuel par son taux horaire.</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded-md">
+                            Horaire Mensuel Moyen x Taux Horaire
+                        </p>
+                        <div class="test-section">
+                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures hebdomadaires:</label>
+                            <input type="number" id="heures-hebdo" class="test-input" value="35">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Taux horaire (€):</label>
+                            <input type="number" id="taux-horaire" class="test-input" value="13">
+                            <button onclick="calculerSalaire()" class="test-button">Calculer le salaire de base</button>
+                            <div id="resultat-salaire" class="test-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: Heures complémentaires et supplémentaires -->
+            <div class="accordion-item" id="accordion-item-2">
+                <div class="accordion-header flex justify-between items-center bg-yellow-50 hover:bg-yellow-100">
+                    <h3 class="text-xl font-bold text-yellow-700">2. Heures complémentaires et supplémentaires</h3>
+                    <svg class="chevron-down w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="accordion-content">
+                    <div class="prose max-w-none text-gray-700">
+                        <h4 class="font-bold text-yellow-700">Heures complémentaires (temps partiel)</h4>
+                        <p>Elles sont effectuées au-delà du contrat, mais en deçà des 35h. Elles sont majorées selon la loi :</p>
+                        <ul class="list-disc list-inside">
+                            <li>Jusqu'à 10% de la durée contractuelle : majoration de 10%.</li>
+                            <li>Au-delà de 10% et jusqu'à 1/3 de la durée contractuelle : majoration de 25%.</li>
+                        </ul>
+                        <p class="font-mono bg-gray-100 p-2 rounded-md">
+                            Rémunération HC majorées = Nombre d'heures x Taux Horaire x Taux de majoration
+                        </p>
+                        <div class="test-section">
+                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures contractuelles hebdomadaires:</label>
+                            <input type="number" id="heures-contractuelles" class="test-input" value="28">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Taux horaire (€):</label>
+                            <input type="number" id="taux-horaire-hc" class="test-input" value="14">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre d'heures complémentaires:</label>
+                            <input type="number" id="nombre-hc" class="test-input" value="4">
+                            <button onclick="calculerHeuresComplementaires()" class="test-button">Calculer les heures complémentaires</button>
+                            <div id="resultat-hc" class="test-result"></div>
+                        </div>
+                        <hr>
+                        <h4 class="font-bold text-yellow-700">Heures supplémentaires (temps plein)</h4>
+                        <p>Elles sont effectuées au-delà de 35h. La majoration légale est :</p>
+                        <ul class="list-disc list-inside">
+                            <li>De la 36ème à la 43ème heure : majoration de 25%.</li>
+                            <li>À partir de la 44ème heure : majoration de 50%.</li>
+                        </ul>
+                        <p class="font-mono bg-gray-100 p-2 rounded-md">
+                            Rémunération HS majorées = Nombre d'heures x Taux Horaire x Taux de majoration
+                        </p>
+                        <div class="test-section">
+                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures totales travaillées:</label>
+                            <input type="number" id="heures-totales-hs" class="test-input" value="40">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Taux horaire (€):</label>
+                            <input type="number" id="taux-horaire-hs" class="test-input" value="15">
+                            <button onclick="calculerHeuresSupplementaires()" class="test-button">Calculer les heures supplémentaires</button>
+                            <div id="resultat-hs" class="test-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Retenue pour absence -->
+            <div class="accordion-item" id="accordion-item-3">
+                <div class="accordion-header flex justify-between items-center bg-orange-50 hover:bg-orange-100">
+                    <h3 class="text-xl font-bold text-orange-700">3. Retenue pour absence</h3>
+                    <svg class="chevron-down w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="accordion-content">
+                    <div class="prose max-w-none text-gray-700">
+                        <h4 class="font-bold text-orange-700">Méthode de l'horaire réel</h4>
+                        <p>C'est la méthode préconisée par la Cour de cassation pour les absences non rémunérées. Le taux horaire est calculé sur le nombre réel d'heures du mois, ce qui est plus précis que la moyenne mensuelle.</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded-md">
+                            Taux Horaire Réel = Salaire de Base / Heures Réelles du Mois
+                        </p>
+                        <p class="font-mono bg-gray-100 p-2 rounded-md">
+                            Retenue pour Absence = Taux Horaire Réel x Heures d'Absence
+                        </p>
+                        <div class="test-section">
+                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Salaire de base (€):</label>
+                            <input type="number" id="salaire-base-retenue" class="test-input" value="2000">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures réelles du mois:</label>
+                            <input type="number" id="heures-reelles-retenue" class="test-input" value="154">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Heures d'absence:</label>
+                            <input type="number" id="heures-absence-retenue" class="test-input" value="21">
+                            <button onclick="calculerRetenueAbsence()" class="test-button">Calculer la retenue</button>
+                            <div id="resultat-retenue" class="test-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: IJSS (Indemnités Journalières de Sécurité Sociale) -->
+            <div class="accordion-item" id="accordion-item-4">
+                <div class="accordion-header flex justify-between items-center bg-amber-50 hover:bg-amber-100">
+                    <h3 class="text-xl font-bold text-amber-700">4. IJSS (Indemnités Journalières)</h3>
+                    <svg class="chevron-down w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="accordion-content">
+                    <div class="prose max-w-none text-gray-700">
+                        <h4 class="font-bold text-amber-700">IJSS maladie non professionnelle</h4>
+                        <p>Elles sont versées après 3 jours de carence. Elles correspondent à 50% du salaire journalier de référence (SJR), calculé sur les 3 derniers mois de salaire brut, dans la limite de 1,8 SMIC mensuels.</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded-md">
+                            IJSS Brutes = (Somme des salaires bruts des 3 derniers mois / 91,25) x 50%
+                        </p>
+                        <div class="test-section">
+                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Somme des salaires bruts des 3 derniers mois (€):</label>
+                            <input type="number" id="salaire-3-mois" class="test-input" value="6000">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de jours d'absence:</label>
+                            <input type="number" id="jours-absence-ijss" class="test-input" value="10">
+                            <button onclick="calculerIJSSMaladie()" class="test-button">Calculer les IJSS (maladie)</button>
+                            <div id="resultat-ijss" class="test-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Avantages en nature -->
+            <div class="accordion-item" id="accordion-item-5">
+                <div class="accordion-header flex justify-between items-center bg-stone-50 hover:bg-stone-100">
+                    <h3 class="text-xl font-bold text-stone-700">5. Avantages en nature</h3>
+                    <svg class="chevron-down w-6 h-6 text-stone-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="accordion-content">
+                    <div class="prose max-w-none text-gray-700">
+                        <h4 class="font-bold text-stone-700">Logement</h4>
+                        <p>L'évaluation forfaitaire se base sur le salaire brut et le nombre de pièces du logement. Un barème est mis à jour chaque année par l'URSSAF.</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded-md">
+                            Valeur Forfaitaire = Montant du barème par pièce x Nombre de pièces
+                        </p>
+                        <div class="test-section">
+                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul (Logement)</h4>
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Montant du barème par pièce (€):</label>
+                            <input type="number" id="montant-logement" class="test-input" value="80">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de pièces:</label>
+                            <input type="number" id="nombre-pieces" class="test-input" value="3">
+                            <button onclick="calculerAvantageLogement()" class="test-button">Calculer la valeur</button>
+                            <div id="resultat-logement" class="test-result"></div>
+                        </div>
+                        <hr>
+                        <h4 class="font-bold text-stone-700">Nourriture</h4>
+                        <p>L'évaluation forfaitaire est fixée annuellement par l'URSSAF, sauf si le salarié paie au moins la moitié de l'évaluation forfaitaire.</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded-md">
+                            Avantage en nature nourriture = (Évaluation forfaitaire - Participation du salarié) x Nombre de repas
+                        </p>
+                         <div class="test-section">
+                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul (Nourriture)</h4>
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Évaluation forfaitaire (€):</label>
+                            <input type="number" id="eval-forfaitaire" class="test-input" value="5.35">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Participation du salarié (€):</label>
+                            <input type="number" id="participation-salarie" class="test-input" value="2">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Nombre de repas:</label>
+                            <input type="number" id="nombre-repas" class="test-input" value="20">
+                            <button onclick="calculerAvantageNourriture()" class="test-button">Calculer la valeur</button>
+                            <div id="resultat-nourriture" class="test-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Section 6: Réduction générale des cotisations (ex-Fillon) -->
+            <div class="accordion-item" id="accordion-item-6">
+                <div class="accordion-header flex justify-between items-center bg-green-50 hover:bg-green-100">
+                    <h3 class="text-xl font-bold text-green-700">6. Réduction Générale de Cotisations (RGCP)</h3>
+                    <svg class="chevron-down w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="accordion-content">
+                    <div class="prose max-w-none text-gray-700">
+                        <p>Cette réduction s'applique aux salaires inférieurs à 1,6 fois le SMIC. Elle est calculée via un coefficient. Le montant de la réduction est la rémunération brute multipliée par ce coefficient.</p>
+                        <p class="font-mono bg-gray-100 p-2 rounded-md">
+                            Coefficient = (T / 0.6) x ((1.6 x SMIC Annuel) / Rémunération Annuelle Brute - 1)
+                        </p>
+                        <div class="test-section">
+                            <h4 class="text-orange-600 font-bold mb-2">Tester le calcul</h4>
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Rémunération Annuelle Brute (€):</label>
+                            <input type="number" id="remuneration-annuelle" class="test-input" value="22000">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">SMIC Annuel (€):</label>
+                            <input type="number" id="smic-annuel" class="test-input" value="21203.47">
+                            <label class="block text-sm font-medium text-gray-700 mt-2">Valeur T (taux de cotisations patronales):</label>
+                            <input type="number" id="valeur-t" class="test-input" value="0.3194">
+                            <button onclick="calculerRGCP()" class="test-button">Calculer le coefficient</button>
+                            <div id="resultat-rgcp" class="test-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const accordionItems = document.querySelectorAll('.accordion-item');
+            accordionItems.forEach(item => {
+                const header = item.querySelector('.accordion-header');
+                const content = item.querySelector('.accordion-content');
+                header.addEventListener('click', () => {
+                    item.classList.toggle('active');
+                    content.classList.toggle('active');
+                });
+            });
+        });
+
+        function calculerAbsence() {
+            const salaireMensuel = parseFloat(document.getElementById('salaire-mensuel').value);
+            const heuresReelles = parseFloat(document.getElementById('heures-reelles').value);
+            const heuresAbsence = parseFloat(document.getElementById('heures-absence').value);
+            const resultatDiv = document.getElementById('resultat-absence');
+            if (heuresReelles === 0) {
+                resultatDiv.innerText = "Erreur: Les heures réelles ne peuvent pas être zéro.";
+                return;
+            }
+            const retenue = (salaireMensuel / heuresReelles) * heuresAbsence;
+            resultatDiv.innerText = `Retenue pour absence (Heures Réelles): ${retenue.toFixed(2)} €`;
+        }
+
+        function calculerCotisations() {
+            const salaireBrut = parseFloat(document.getElementById('salaire-brut-cotis').value);
+            const pmss = parseFloat(document.getElementById('pmss').value);
+            const resultatDiv = document.getElementById('resultat-cotisations');
+            
+            let mal = salaireBrut * 0.07;
+            let vieillessePlaf = 0;
+            if (salaireBrut <= pmss) {
+                vieillessePlaf = salaireBrut * 0.0690;
+            } else {
+                vieillessePlaf = pmss * 0.0690;
+            }
+            let vieillesseDeplaf = salaireBrut * 0.0040;
+            let csgCrdsBase = salaireBrut * 0.9825;
+            let csgCrds = csgCrdsBase * 0.097;
+            let chomage = salaireBrut * 0.0240;
+
+            resultatDiv.innerHTML = `
+                <p><strong>Maladie (employeur):</strong> ${mal.toFixed(2)} €</p>
+                <p><strong>Vieillesse Plafonnée (salarié):</strong> ${vieillessePlaf.toFixed(2)} €</p>
+                <p><strong>Vieillesse Déplafonnée (salarié):</strong> ${vieillesseDeplaf.toFixed(2)} €</p>
+                <p><strong>CSG/CRDS:</strong> ${csgCrds.toFixed(2)} €</p>
+                <p><strong>Chômage (employeur):</strong> ${chomage.toFixed(2)} €</p>
+            `;
+        }
+
+        function calculerSalaire() {
+            const heuresHebdo = parseFloat(document.getElementById('heures-hebdo').value);
+            const tauxHoraire = parseFloat(document.getElementById('taux-horaire').value);
+            const resultatDiv = document.getElementById('resultat-salaire');
+
+            const heuresMensuelles = (heuresHebdo * 52) / 12;
+            const salaireBase = heuresMensuelles * tauxHoraire;
+
+            resultatDiv.innerHTML = `
+                <p><strong>Heures mensuelles moyennes:</strong> ${heuresMensuelles.toFixed(2)} h</p>
+                <p><strong>Salaire de base:</strong> ${salaireBase.toFixed(2)} €</p>
+            `;
+        }
+
+        function calculerHeuresComplementaires() {
+            const heuresContractuelles = parseFloat(document.getElementById('heures-contractuelles').value);
+            const tauxHoraire = parseFloat(document.getElementById('taux-horaire-hc').value);
+            const nombreHc = parseFloat(document.getElementById('nombre-hc').value);
+            const resultatDiv = document.getElementById('resultat-hc');
+
+            let totalHc = 0;
+            const seuil10 = heuresContractuelles * 0.10;
+            const seuil33 = heuresContractuelles * (1/3);
+
+            if (nombreHc <= seuil10) {
+                totalHc = nombreHc * tauxHoraire * 1.10;
+            } else if (nombreHc > seuil10 && nombreHc <= seuil33) {
+                const heures10 = seuil10;
+                const heures25 = nombreHc - seuil10;
+                totalHc = (heures10 * tauxHoraire * 1.10) + (heures25 * tauxHoraire * 1.25);
+            } else {
+                 totalHc = (seuil10 * tauxHoraire * 1.10) + ((seuil33-seuil10) * tauxHoraire * 1.25);
+                 resultatDiv.innerText = `Attention, le nombre d'heures complémentaires excède le tiers des heures contractuelles. `;
+                 resultatDiv.innerText += `La rémunération maximale est de ${totalHc.toFixed(2)} €`;
+                 return;
+            }
+            
+            resultatDiv.innerText = `Rémunération pour les heures complémentaires: ${totalHc.toFixed(2)} €`;
+        }
+
+        function calculerHeuresSupplementaires() {
+            const heuresTotales = parseFloat(document.getElementById('heures-totales-hs').value);
+            const tauxHoraire = parseFloat(document.getElementById('taux-horaire-hs').value);
+            const resultatDiv = document.getElementById('resultat-hs');
+            const heuresLegales = 35;
+            let totalHs = 0;
+
+            if (heuresTotales > heuresLegales) {
+                const heuresSupp = heuresTotales - heuresLegales;
+                if (heuresSupp <= 8) {
+                    totalHs = heuresSupp * tauxHoraire * 1.25;
+                } else {
+                    const heures25 = 8;
+                    const heures50 = heuresSupp - 8;
+                    totalHs = (heures25 * tauxHoraire * 1.25) + (heures50 * tauxHoraire * 1.50);
+                }
+            }
+            resultatDiv.innerText = `Rémunération pour les heures supplémentaires: ${totalHs.toFixed(2)} €`;
+        }
+
+        function calculerRetenueAbsence() {
+            const salaireBase = parseFloat(document.getElementById('salaire-base-retenue').value);
+            const heuresReelles = parseFloat(document.getElementById('heures-reelles-retenue').value);
+            const heuresAbsence = parseFloat(document.getElementById('heures-absence-retenue').value);
+            const resultatDiv = document.getElementById('resultat-retenue');
+
+            if (heuresReelles === 0) {
+                resultatDiv.innerText = "Erreur: Les heures réelles ne peuvent pas être zéro.";
+                return;
+            }
+
+            const tauxHoraireReel = salaireBase / heuresReelles;
+            const retenue = tauxHoraireReel * heuresAbsence;
+            resultatDiv.innerText = `Retenue pour absence: ${retenue.toFixed(2)} €`;
+        }
+
+        function calculerIJSSMaladie() {
+            const salaire3Mois = parseFloat(document.getElementById('salaire-3-mois').value);
+            const joursAbsence = parseFloat(document.getElementById('jours-absence-ijss').value);
+            const resultatDiv = document.getElementById('resultat-ijss');
+
+            const sjr = salaire3Mois / 91.25;
+            const ijssJournalieres = sjr * 0.50;
+            const totalIJSS = (joursAbsence > 3) ? ijssJournalieres * (joursAbsence - 3) : 0;
+
+            resultatDiv.innerHTML = `
+                <p><strong>Salaire Journalier de Référence:</strong> ${sjr.toFixed(2)} €</p>
+                <p><strong>IJSS Journalières:</strong> ${ijssJournalieres.toFixed(2)} €</p>
+                <p><strong>Total IJSS (après carence):</strong> ${totalIJSS.toFixed(2)} €</p>
+            `;
+        }
+
+        function calculerAvantageLogement() {
+            const montant = parseFloat(document.getElementById('montant-logement').value);
+            const pieces = parseFloat(document.getElementById('nombre-pieces').value);
+            const resultatDiv = document.getElementById('resultat-logement');
+            const valeur = montant * pieces;
+            resultatDiv.innerText = `Valeur de l'avantage en nature (Logement): ${valeur.toFixed(2)} €`;
+        }
+
+        function calculerAvantageNourriture() {
+            const evalForfaitaire = parseFloat(document.getElementById('eval-forfaitaire').value);
+            const participation = parseFloat(document.getElementById('participation-salarie').value);
+            const repas = parseFloat(document.getElementById('nombre-repas').value);
+            const resultatDiv = document.getElementById('resultat-nourriture');
+            const valeur = (evalForfaitaire - participation) * repas;
+            resultatDiv.innerText = `Valeur de l'avantage en nature (Nourriture): ${valeur.toFixed(2)} €`;
+        }
+
+        function calculerRGCP() {
+            const remunerationAnnuelle = parseFloat(document.getElementById('remuneration-annuelle').value);
+            const smicAnnuel = parseFloat(document.getElementById('smic-annuel').value);
+            const valeurT = parseFloat(document.getElementById('valeur-t').value);
+            const resultatDiv = document.getElementById('resultat-rgcp');
+
+            const coefficient = (valeurT / 0.6) * (((1.6 * smicAnnuel) / remunerationAnnuelle) - 1);
+            const reduction = remunerationAnnuelle * coefficient;
+
+            resultatDiv.innerHTML = `
+                <p><strong>Coefficient:</strong> ${coefficient.toFixed(4)}</p>
+                <p><strong>Montant de la réduction:</strong> ${reduction.toFixed(2)} €</p>
+            `;
+        }
+    </script>
+</body>
+</html>
