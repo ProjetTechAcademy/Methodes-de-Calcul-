@@ -72,6 +72,13 @@
             margin-top: 1.5rem;
             border-radius: 0.5rem;
         }
+        .justification-box {
+            background-color: #f3e8ff; /* Rose/Violet pastel */
+            border-left: 4px solid #a855f7; /* Violet */
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+        }
         .test-input {
             width: 100%;
             padding: 0.5rem;
@@ -163,7 +170,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap">Jours ouvrables</td>
                                         <td class="px-6 py-4">Basée sur les jours ouvrables (lundi au samedi).</td>
                                         <td class="px-6 py-4">(Salaire / Jours ouvrables du mois) x Jours d'absence</td>
-                                        <td class="px-6 py-4">Exemple de base moyenne : 26 jours.</td>
+                                        <td class="px-6 py-4">Utilisée pour les absences longues (maladie, etc.).</td>
                                     </tr>
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">Jours calendaires</td>
@@ -189,6 +196,7 @@
                             <input type="number" id="heures-absence" class="test-input" value="21">
                             <button onclick="calculerAbsence()" class="test-button">Tester le calcul</button>
                             <div id="resultat-absence" class="test-result"></div>
+                            <div id="justification-absence" class="justification-box hidden"></div>
                         </div>
                     </div>
                 </div>
@@ -258,6 +266,7 @@
                             <input type="number" id="pmss" class="test-input" value="3925">
                             <button onclick="calculerCotisations()" class="test-button">Tester le calcul</button>
                             <div id="resultat-cotisations" class="test-result"></div>
+                            <div id="justification-cotisations" class="justification-box hidden"></div>
                         </div>
                     </div>
                 </div>
@@ -291,6 +300,7 @@
                             <input type="number" id="taux-horaire" class="test-input" value="13">
                             <button onclick="calculerSalaire()" class="test-button">Calculer le salaire de base</button>
                             <div id="resultat-salaire" class="test-result"></div>
+                            <div id="justification-salaire" class="justification-box hidden"></div>
                         </div>
                     </div>
                 </div>
@@ -323,6 +333,7 @@
                             <input type="number" id="nombre-hc" class="test-input" value="4">
                             <button onclick="calculerHeuresComplementaires()" class="test-button">Calculer les heures complémentaires</button>
                             <div id="resultat-hc" class="test-result"></div>
+                            <div id="justification-hc" class="justification-box hidden"></div>
                         </div>
                         <hr>
                         <h4 class="font-bold text-yellow-700">Heures supplémentaires (temps plein)</h4>
@@ -342,6 +353,7 @@
                             <input type="number" id="taux-horaire-hs" class="test-input" value="15">
                             <button onclick="calculerHeuresSupplementaires()" class="test-button">Calculer les heures supplémentaires</button>
                             <div id="resultat-hs" class="test-result"></div>
+                            <div id="justification-hs" class="justification-box hidden"></div>
                         </div>
                     </div>
                 </div>
@@ -373,6 +385,7 @@
                             <input type="number" id="heures-absence-retenue" class="test-input" value="21">
                             <button onclick="calculerRetenueAbsence()" class="test-button">Calculer la retenue</button>
                             <div id="resultat-retenue" class="test-result"></div>
+                            <div id="justification-retenue" class="justification-box hidden"></div>
                         </div>
                     </div>
                 </div>
@@ -399,6 +412,7 @@
                             <input type="number" id="jours-absence-ijss" class="test-input" value="10">
                             <button onclick="calculerIJSSMaladie()" class="test-button">Calculer les IJSS (maladie)</button>
                             <div id="resultat-ijss" class="test-result"></div>
+                            <div id="justification-ijss" class="justification-box hidden"></div>
                         </div>
                     </div>
                 </div>
@@ -425,6 +439,7 @@
                             <input type="number" id="nombre-pieces" class="test-input" value="3">
                             <button onclick="calculerAvantageLogement()" class="test-button">Calculer la valeur</button>
                             <div id="resultat-logement" class="test-result"></div>
+                            <div id="justification-logement" class="justification-box hidden"></div>
                         </div>
                         <hr>
                         <h4 class="font-bold text-stone-700">Nourriture</h4>
@@ -442,6 +457,7 @@
                             <input type="number" id="nombre-repas" class="test-input" value="20">
                             <button onclick="calculerAvantageNourriture()" class="test-button">Calculer la valeur</button>
                             <div id="resultat-nourriture" class="test-result"></div>
+                            <div id="justification-nourriture" class="justification-box hidden"></div>
                         </div>
                     </div>
                 </div>
@@ -469,6 +485,7 @@
                             <input type="number" id="valeur-t" class="test-input" value="0.3194">
                             <button onclick="calculerRGCP()" class="test-button">Calculer le coefficient</button>
                             <div id="resultat-rgcp" class="test-result"></div>
+                            <div id="justification-rgcp" class="justification-box hidden"></div>
                         </div>
                     </div>
                 </div>
@@ -495,19 +512,32 @@
             const heuresReelles = parseFloat(document.getElementById('heures-reelles').value);
             const heuresAbsence = parseFloat(document.getElementById('heures-absence').value);
             const resultatDiv = document.getElementById('resultat-absence');
+            const justificationDiv = document.getElementById('justification-absence');
             if (heuresReelles === 0) {
                 resultatDiv.innerText = "Erreur: Les heures réelles ne peuvent pas être zéro.";
+                justificationDiv.classList.add('hidden');
                 return;
             }
             const retenue = (salaireMensuel / heuresReelles) * heuresAbsence;
             resultatDiv.innerText = `Retenue pour absence (Heures Réelles): ${retenue.toFixed(2)} €`;
+
+            justificationDiv.innerHTML = `
+                <h4 class="font-bold text-purple-700">Justification du calcul :</h4>
+                <p>La Cour de cassation préconise la méthode de la <strong>retenue pour absence sur l'horaire réel</strong>. Elle consiste à calculer la valeur d'une heure de travail en divisant le salaire de base par le nombre d'heures réelles travaillées dans le mois concerné.</p>
+                <p>Ensuite, on multiplie cette valeur par le nombre d'heures d'absence. Cette méthode est considérée comme la plus juste car elle reflète la valeur exacte de chaque heure de travail du mois.</p>
+                <p><strong>Calcul :</strong><br>
+                Valeur de l'heure = ${salaireMensuel} € / ${heuresReelles} h = ${(salaireMensuel / heuresReelles).toFixed(2)} €<br>
+                Retenue = ${(salaireMensuel / heuresReelles).toFixed(2)} € x ${heuresAbsence} h = ${retenue.toFixed(2)} €</p>
+            `;
+            justificationDiv.classList.remove('hidden');
         }
 
         function calculerCotisations() {
             const salaireBrut = parseFloat(document.getElementById('salaire-brut-cotis').value);
             const pmss = parseFloat(document.getElementById('pmss').value);
             const resultatDiv = document.getElementById('resultat-cotisations');
-            
+            const justificationDiv = document.getElementById('justification-cotisations');
+
             let mal = salaireBrut * 0.07;
             let vieillessePlaf = 0;
             if (salaireBrut <= pmss) {
@@ -527,12 +557,25 @@
                 <p><strong>CSG/CRDS:</strong> ${csgCrds.toFixed(2)} €</p>
                 <p><strong>Chômage (employeur):</strong> ${chomage.toFixed(2)} €</p>
             `;
+            justificationDiv.innerHTML = `
+                <h4 class="font-bold text-purple-700">Justification du calcul :</h4>
+                <p>Chaque cotisation a sa propre <strong>assiette</strong> (la base de calcul) et son propre <strong>taux</strong>. Voici comment nous avons procédé :</p>
+                <ul class="list-disc list-inside">
+                    <li><strong>Maladie :</strong> La base est le salaire brut total. Le calcul est simple : ${salaireBrut} € x 7% = ${mal.toFixed(2)} €.</li>
+                    <li><strong>Vieillesse Plafonnée :</strong> La base est plafonnée au PMSS. Nous avons pris le PMSS de ${pmss} € et appliqué le taux de 6,90% car le salaire brut de ${salaireBrut} € est inférieur/supérieur au PMSS. Le calcul est : ${vieillessePlaf.toFixed(2)} €.</li>
+                    <li><strong>Vieillesse Déplafonnée :</strong> Cette cotisation s'applique à l'intégralité du salaire brut. Le calcul est : ${salaireBrut} € x 0.40% = ${vieillesseDeplaf.toFixed(2)} €.</li>
+                    <li><strong>CSG/CRDS :</strong> La base est le salaire brut avec un abattement de 1,75%. Le calcul est : (${salaireBrut} € x 98,25%) x 9,7% = ${csgCrds.toFixed(2)} €.</li>
+                    <li><strong>Chômage :</strong> La base est le salaire brut total. Le calcul est : ${salaireBrut} € x 2,40% = ${chomage.toFixed(2)} €.</li>
+                </ul>
+            `;
+            justificationDiv.classList.remove('hidden');
         }
 
         function calculerSalaire() {
             const heuresHebdo = parseFloat(document.getElementById('heures-hebdo').value);
             const tauxHoraire = parseFloat(document.getElementById('taux-horaire').value);
             const resultatDiv = document.getElementById('resultat-salaire');
+            const justificationDiv = document.getElementById('justification-salaire');
 
             const heuresMensuelles = (heuresHebdo * 52) / 12;
             const salaireBase = heuresMensuelles * tauxHoraire;
@@ -541,6 +584,14 @@
                 <p><strong>Heures mensuelles moyennes:</strong> ${heuresMensuelles.toFixed(2)} h</p>
                 <p><strong>Salaire de base:</strong> ${salaireBase.toFixed(2)} €</p>
             `;
+            justificationDiv.innerHTML = `
+                <h4 class="font-bold text-purple-700">Justification du calcul :</h4>
+                <p>Pour obtenir un salaire de base fiable, on utilise la formule de la mensualisation, qui uniformise la rémunération tout au long de l'année. On prend le nombre d'heures hebdomadaires, on le multiplie par le nombre de semaines dans l'année (52) et on divise par le nombre de mois (12). Le résultat est ensuite multiplié par le taux horaire du salarié.</p>
+                <p><strong>Calcul :</strong><br>
+                Heures Mensuelles = (${heuresHebdo} h x 52) / 12 = ${heuresMensuelles.toFixed(2)} h<br>
+                Salaire de base = ${heuresMensuelles.toFixed(2)} h x ${tauxHoraire} €/h = ${salaireBase.toFixed(2)} €</p>
+            `;
+            justificationDiv.classList.remove('hidden');
         }
 
         function calculerHeuresComplementaires() {
@@ -548,45 +599,62 @@
             const tauxHoraire = parseFloat(document.getElementById('taux-horaire-hc').value);
             const nombreHc = parseFloat(document.getElementById('nombre-hc').value);
             const resultatDiv = document.getElementById('resultat-hc');
+            const justificationDiv = document.getElementById('justification-hc');
 
             let totalHc = 0;
+            let justificationText = '';
             const seuil10 = heuresContractuelles * 0.10;
             const seuil33 = heuresContractuelles * (1/3);
 
             if (nombreHc <= seuil10) {
                 totalHc = nombreHc * tauxHoraire * 1.10;
+                justificationText = `<p>Les heures complémentaires sont majorées à 10% car elles sont inférieures ou égales à 10% de la durée contractuelle (${seuil10.toFixed(2)} h).</p>
+                                    <p><strong>Calcul :</strong> ${nombreHc} h x ${tauxHoraire} €/h x 1.10 = ${totalHc.toFixed(2)} €</p>`;
             } else if (nombreHc > seuil10 && nombreHc <= seuil33) {
                 const heures10 = seuil10;
                 const heures25 = nombreHc - seuil10;
                 totalHc = (heures10 * tauxHoraire * 1.10) + (heures25 * tauxHoraire * 1.25);
+                justificationText = `<p>Le calcul se fait en deux parties : les heures jusqu'au seuil de 10% (${heures10.toFixed(2)} h) sont majorées à 10%, et les heures restantes (${heures25.toFixed(2)} h) sont majorées à 25%.</p>
+                                    <p><strong>Calcul :</strong> (${heures10.toFixed(2)} h x ${tauxHoraire} €/h x 1.10) + (${heures25.toFixed(2)} h x ${tauxHoraire} €/h x 1.25) = ${totalHc.toFixed(2)} €</p>`;
             } else {
                  totalHc = (seuil10 * tauxHoraire * 1.10) + ((seuil33-seuil10) * tauxHoraire * 1.25);
-                 resultatDiv.innerText = `Attention, le nombre d'heures complémentaires excède le tiers des heures contractuelles. `;
-                 resultatDiv.innerText += `La rémunération maximale est de ${totalHc.toFixed(2)} €`;
-                 return;
+                 justificationText = `<p class="font-bold text-red-600">Attention !</p><p>Le nombre d'heures complémentaires (${nombreHc} h) excède le tiers des heures contractuelles (${seuil33.toFixed(2)} h). La rémunération maximale est de ${totalHc.toFixed(2)} €.</p>`;
             }
             
             resultatDiv.innerText = `Rémunération pour les heures complémentaires: ${totalHc.toFixed(2)} €`;
+            justificationDiv.innerHTML = `<h4 class="font-bold text-purple-700">Justification du calcul :</h4>` + justificationText;
+            justificationDiv.classList.remove('hidden');
         }
 
         function calculerHeuresSupplementaires() {
             const heuresTotales = parseFloat(document.getElementById('heures-totales-hs').value);
             const tauxHoraire = parseFloat(document.getElementById('taux-horaire-hs').value);
             const resultatDiv = document.getElementById('resultat-hs');
+            const justificationDiv = document.getElementById('justification-hs');
+
             const heuresLegales = 35;
             let totalHs = 0;
+            let justificationText = '';
 
             if (heuresTotales > heuresLegales) {
                 const heuresSupp = heuresTotales - heuresLegales;
                 if (heuresSupp <= 8) {
                     totalHs = heuresSupp * tauxHoraire * 1.25;
+                    justificationText = `<p>Les heures supplémentaires sont majorées à 25% car elles sont comprises entre la 36ème et la 43ème heure (soit jusqu'à 8 heures supplémentaires).</p>
+                                        <p><strong>Calcul :</strong> ${heuresSupp} h x ${tauxHoraire} €/h x 1.25 = ${totalHs.toFixed(2)} €</p>`;
                 } else {
                     const heures25 = 8;
                     const heures50 = heuresSupp - 8;
                     totalHs = (heures25 * tauxHoraire * 1.25) + (heures50 * tauxHoraire * 1.50);
+                    justificationText = `<p>Le calcul se fait en deux parties : les 8 premières heures supplémentaires sont majorées à 25%, et les heures suivantes (${heures50} h) sont majorées à 50%.</p>
+                                        <p><strong>Calcul :</strong> (${heures25} h x ${tauxHoraire} €/h x 1.25) + (${heures50} h x ${tauxHoraire} €/h x 1.50) = ${totalHs.toFixed(2)} €</p>`;
                 }
+            } else {
+                justificationText = `<p>Il n'y a pas d'heures supplémentaires, car les heures totales travaillées sont inférieures ou égales à 35 heures.</p>`;
             }
             resultatDiv.innerText = `Rémunération pour les heures supplémentaires: ${totalHs.toFixed(2)} €`;
+            justificationDiv.innerHTML = `<h4 class="font-bold text-purple-700">Justification du calcul :</h4>` + justificationText;
+            justificationDiv.classList.remove('hidden');
         }
 
         function calculerRetenueAbsence() {
@@ -594,21 +662,34 @@
             const heuresReelles = parseFloat(document.getElementById('heures-reelles-retenue').value);
             const heuresAbsence = parseFloat(document.getElementById('heures-absence-retenue').value);
             const resultatDiv = document.getElementById('resultat-retenue');
+            const justificationDiv = document.getElementById('justification-retenue');
 
             if (heuresReelles === 0) {
                 resultatDiv.innerText = "Erreur: Les heures réelles ne peuvent pas être zéro.";
+                justificationDiv.classList.add('hidden');
                 return;
             }
 
             const tauxHoraireReel = salaireBase / heuresReelles;
             const retenue = tauxHoraireReel * heuresAbsence;
             resultatDiv.innerText = `Retenue pour absence: ${retenue.toFixed(2)} €`;
+
+            justificationDiv.innerHTML = `
+                <h4 class="font-bold text-purple-700">Justification du calcul :</h4>
+                <p>Pour une absence, le montant est calculé en fonction de la valeur réelle de chaque heure du mois. On commence par déterminer le taux horaire réel en divisant le salaire de base par le nombre d'heures réelles du mois.</p>
+                <p>Ensuite, on multiplie ce taux horaire réel par le nombre d'heures d'absence pour trouver le montant exact à retenir sur le salaire.</p>
+                <p><strong>Calcul :</strong><br>
+                Taux horaire réel = ${salaireBase} € / ${heuresReelles} h = ${tauxHoraireReel.toFixed(2)} €<br>
+                Retenue = ${tauxHoraireReel.toFixed(2)} € x ${heuresAbsence} h = ${retenue.toFixed(2)} €</p>
+            `;
+            justificationDiv.classList.remove('hidden');
         }
 
         function calculerIJSSMaladie() {
             const salaire3Mois = parseFloat(document.getElementById('salaire-3-mois').value);
             const joursAbsence = parseFloat(document.getElementById('jours-absence-ijss').value);
             const resultatDiv = document.getElementById('resultat-ijss');
+            const justificationDiv = document.getElementById('justification-ijss');
 
             const sjr = salaire3Mois / 91.25;
             const ijssJournalieres = sjr * 0.50;
@@ -619,14 +700,34 @@
                 <p><strong>IJSS Journalières:</strong> ${ijssJournalieres.toFixed(2)} €</p>
                 <p><strong>Total IJSS (après carence):</strong> ${totalIJSS.toFixed(2)} €</p>
             `;
+            justificationDiv.innerHTML = `
+                <h4 class="font-bold text-purple-700">Justification du calcul :</h4>
+                <p>Les IJSS sont versées pour compenser la perte de salaire due à un arrêt maladie non professionnelle. Elles sont calculées à partir du Salaire Journalier de Référence (SJR), qui est la moyenne des salaires bruts des trois derniers mois.</p>
+                <p>On applique ensuite un taux de 50% sur le SJR. La Caisse Primaire d'Assurance Maladie (CPAM) applique un délai de carence de 3 jours avant le versement. Le total est donc calculé sur le nombre de jours d'absence moins les 3 jours de carence.</p>
+                <p><strong>Calcul :</strong><br>
+                SJR = ${salaire3Mois} € / 91,25 jours = ${sjr.toFixed(2)} €<br>
+                IJSS Journalières = ${sjr.toFixed(2)} € x 50% = ${ijssJournalieres.toFixed(2)} €<br>
+                Total IJSS = ${ijssJournalieres.toFixed(2)} € x (${joursAbsence} - 3) jours = ${totalIJSS.toFixed(2)} €</p>
+            `;
+            justificationDiv.classList.remove('hidden');
         }
 
         function calculerAvantageLogement() {
             const montant = parseFloat(document.getElementById('montant-logement').value);
             const pieces = parseFloat(document.getElementById('nombre-pieces').value);
             const resultatDiv = document.getElementById('resultat-logement');
+            const justificationDiv = document.getElementById('justification-logement');
+
             const valeur = montant * pieces;
             resultatDiv.innerText = `Valeur de l'avantage en nature (Logement): ${valeur.toFixed(2)} €`;
+            
+            justificationDiv.innerHTML = `
+                <h4 class="font-bold text-purple-700">Justification du calcul :</h4>
+                <p>Le calcul de l'avantage en nature pour un logement se fait en utilisant la méthode forfaitaire, basée sur un barème fourni par l'URSSAF. Ce barème prend en compte le niveau de rémunération du salarié et le nombre de pièces du logement.</p>
+                <p><strong>Calcul :</strong><br>
+                Valeur de l'avantage = ${montant} €/pièce x ${pieces} pièces = ${valeur.toFixed(2)} €</p>
+            `;
+            justificationDiv.classList.remove('hidden');
         }
 
         function calculerAvantageNourriture() {
@@ -634,8 +735,19 @@
             const participation = parseFloat(document.getElementById('participation-salarie').value);
             const repas = parseFloat(document.getElementById('nombre-repas').value);
             const resultatDiv = document.getElementById('resultat-nourriture');
+            const justificationDiv = document.getElementById('justification-nourriture');
+            
             const valeur = (evalForfaitaire - participation) * repas;
             resultatDiv.innerText = `Valeur de l'avantage en nature (Nourriture): ${valeur.toFixed(2)} €`;
+
+            justificationDiv.innerHTML = `
+                <h4 class="font-bold text-purple-700">Justification du calcul :</h4>
+                <p>L'avantage en nature pour la nourriture est calculé en se basant sur une évaluation forfaitaire annuelle, déduction faite de la participation du salarié. Ce montant est ensuite multiplié par le nombre de repas pris.</p>
+                <p><strong>Calcul :</strong><br>
+                Valeur par repas = ${evalForfaitaire.toFixed(2)} € - ${participation.toFixed(2)} € = ${(evalForfaitaire - participation).toFixed(2)} €<br>
+                Valeur totale = ${(evalForfaitaire - participation).toFixed(2)} € x ${repas} repas = ${valeur.toFixed(2)} €</p>
+            `;
+            justificationDiv.classList.remove('hidden');
         }
 
         function calculerRGCP() {
@@ -643,6 +755,7 @@
             const smicAnnuel = parseFloat(document.getElementById('smic-annuel').value);
             const valeurT = parseFloat(document.getElementById('valeur-t').value);
             const resultatDiv = document.getElementById('resultat-rgcp');
+            const justificationDiv = document.getElementById('justification-rgcp');
 
             const coefficient = (valeurT / 0.6) * (((1.6 * smicAnnuel) / remunerationAnnuelle) - 1);
             const reduction = remunerationAnnuelle * coefficient;
@@ -651,6 +764,15 @@
                 <p><strong>Coefficient:</strong> ${coefficient.toFixed(4)}</p>
                 <p><strong>Montant de la réduction:</strong> ${reduction.toFixed(2)} €</p>
             `;
+            justificationDiv.innerHTML = `
+                <h4 class="font-bold text-purple-700">Justification du calcul :</h4>
+                <p>La Réduction Générale des Cotisations Patronales (RGCP) est un dispositif qui permet de réduire les cotisations pour les bas salaires. Le calcul se base sur un coefficient déterminé par une formule légale qui prend en compte le SMIC annuel et la rémunération brute du salarié.</p>
+                <p>Le montant final de la réduction est obtenu en multipliant ce coefficient par la rémunération annuelle brute.</p>
+                <p><strong>Calcul :</strong><br>
+                Coefficient = (${valeurT} / 0.6) x (((1.6 x ${smicAnnuel} €) / ${remunerationAnnuelle} €) - 1) = ${coefficient.toFixed(4)}<br>
+                Réduction = ${remunerationAnnuelle} € x ${coefficient.toFixed(4)} = ${reduction.toFixed(2)} €</p>
+            `;
+            justificationDiv.classList.remove('hidden');
         }
     </script>
 </body>
